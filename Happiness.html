@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>System Update: Birthday Edition</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff41; /* Цвет классического терминала */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #terminal {
+            width: 80%;
+            max-width: 600px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            border: 1px solid #333;
+        }
+        .btn {
+            background: transparent;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 10px 20px;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #00ff41;
+            color: #121212;
+        }
+        .line { margin-bottom: 5px; min-height: 1.2em; }
+        .hidden { display: none; }
+        #canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="terminal">
+    <div id="output">
+        <div class="line">> System ready...</div>
+        <div class="line">> Awaiting user action...</div>
+    </div>
+    <button class="btn" id="startBtn">./deploy_happiness.sh</button>
+</div>
+
+<!-- Подключаем библиотеку для конфетти -->
+<script src="https://jsdelivr.net"></script>
+
+<script>
+    const output = document.getElementById('output');
+    const btn = document.getElementById('startBtn');
+    
+    const logs = [
+        "> Initializing birthday protocols...",
+        "> Loading health.dll [##########] 100%",
+        "> Loading wealth.js [##########] 100%",
+        "> Optimizing luck_index.py...",
+        "> Compiling 'Success' module...",
+        "> Bug check: 0 bugs found.",
+        "> STATUS: READY TO CELEBRATE!"
+    ];
+
+    async function startDeployment() {
+        btn.classList.add('hidden');
+        
+        for (let log of logs) {
+            const line = document.createElement('div');
+            line.className = 'line';
+            line.textContent = log;
+            output.appendChild(line);
+            await new Promise(r => setTimeout(r, 600)); // Задержка между строками
+        }
+
+        // Финальное сообщение
+        const final = document.createElement('div');
+        final.style.color = '#fff';
+        final.style.fontSize = '1.5em';
+        final.style.marginTop = '20px';
+        final.innerHTML = "<br>HAPPY BIRTHDAY!<br>Пусть твой код всегда компилится, а жизнь не багует! 🎂🚀";
+        output.appendChild(final);
+
+        // Запуск конфетти
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#00ff41', '#ffffff', '#ff00ff']
+        });
+    }
+
+    btn.addEventListener('click', startDeployment);
+</script>
+
+</body>
+</html>
+
