@@ -177,6 +177,7 @@
     }
     function showLog() { 
     // 1. Открываем окно
+    console.log("Кнопка нажата, пытаюсь запустить музыку...");
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.style.display = 'block';
     
@@ -184,15 +185,23 @@
     const oldMusic = document.getElementById('bgMusic'); // Первая музыка
     const newMusic = document.getElementById('changelogMusic'); // Музыка чейнджлога
     
-    if (oldMusic) {
-        oldMusic.pause(); // Останавливаем фоновый трек
-    }
-    
+    if (oldMusic) oldMusic.pause();
+
     if (newMusic) {
-        newMusic.volume = 0.4; // Устанавливаем громкость (0.4 = 40%)
-        newMusic.currentTime = 0; // Сбрасываем трек на начало
-        newMusic.play().catch(e => console.log("Браузер заблокировал звук. Нужен клик!"));
-    }
+        // Устанавливаем громкость
+        newMusic.volume = 0.5;
+        
+        // Маленькая хитрость: браузеры любят, когда музыку запускают через промис
+        const playPromise = newMusic.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                console.log("Музыка успешно запущена!");
+            }).catch(error => {
+                console.error("Автозапуск заблокирован или файл не найден:", error);
+                // Если файл не найден, в консоли браузера (F12) будет ошибка 404
+            });
+        }
 
     // 3. Запускаем зайца
     moveRabbit();
@@ -312,6 +321,10 @@ function closeWish() {
     requestAnimationFrame(animate);
 }
 
+<audio id="changelogMusic" preload="auto">
+        <source src="images/твой_файл.mp3" type="audio/mpeg">
+        <source src="https://soundhelix.com" type="audio/mpeg">
+    </audio>
 </script>
 </body>
 </html>
