@@ -7,10 +7,10 @@
     <style>
         body { background: #121212; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         #terminal { width: 90%; max-width: 500px; background: #1e1e1e; padding: 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0,255,65,0.15); position: relative; z-index: 10; }
-        .btn { background: transparent; color: #00ff41; border: 1px solid #00ff41; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-size: 1.1em; transition: 0.3s; display: block; text-align: center; text-decoration: none; }
+        .btn { background: transparent; color: #00ff41; border: 1px solid #00ff41; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-size: 1.1em; transition: 0.3s; display: block; width: 100%; box-sizing: border-box; }
         .btn:hover { background: rgba(0, 255, 65, 0.1); }
-        .line { margin: 8px 0; font-size: 0.9em; }
-        #final-msg { color: #fff; font-weight: bold; font-size: 1.2em; margin-top: 15px; display: none; }
+        .line { margin: 8px 0; font-size: 0.9em; height: 1.2em; }
+        #final-msg { color: #fff; font-weight: bold; font-size: 1.2em; margin-top: 15px; display: none; text-align: center; }
         
         #moreBtn { display: none; border-color: #00ff41; color: #00ff41; }
         #overlay { 
@@ -49,15 +49,14 @@
         <span class="tag">Module "Unstoppable Wealth":</span> <span class="desc">Внедрен алгоритм автоматического пополнения банковского счета.</span>
         <span class="tag">Feature "Ideal Body":</span> <span class="desc">Добавлена встроенная поддержка отличной формы без конфликтов с пиццей и тортиками.</span>
         <span class="tag">New Location:</span> <span class="desc">Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
-        <span class="tag">System "Smart Zen":</span> <span class="desc">Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
+        <span class="tag">System "Smart Zen":</span> <span class="desc">Полная невозмутимость при любых факапах.</span>
 
         <h2>🛠 Changed (Изменения и улучшения):</h2>
-        <span class="tag">Engine Update:</span> <span class="desc">Личная энергия оптимизирована, КПД увеличен на 100%.</span>
-        <span class="tag">UI/UX:</span> <span class="desc">Улыбка стала ярче, а взгляд — увереннее. Обновлены скины «Успешный успех».</span>
-        <span class="tag">Algorithm "Priority":</span> <span class="desc">Система фокусируется на личных желаниях.</span>
+        <span class="tag">Engine Update:</span> <span class="desc">Личная энергия оптимизирована, КПД +100%.</span>
+        <span class="tag">UI/UX:</span> <span class="desc">Улыбка стала ярче, обновлены скины «Успех».</span>
 
         <h2>🩹 Fixed (Исправлено):</h2>
-        <span class="tag">Bug "Procrastination":</span> <span class="desc">Исправлена ошибка, из-за которой дела откладывались на завтра.</span>
+        <span class="tag">Bug "Procrastination":</span> <span class="desc">Исправлена ошибка откладывания дел.</span>
         <span class="tag">Issue "Stress":</span> <span class="desc">Удалена критическая уязвимость настроения.</span>
 
         <h2>🗑 Removed (Удалено):</h2>
@@ -66,69 +65,67 @@
     </div>
 </div>
 
-<!-- Музыка: Прямая ссылка на хакерский трек -->
-<audio id="bgMusic" loop preload="auto">
-    <source src="https://pixabay.com" type="audio/mpeg">
+<!-- Музыка: Альтернативный надежный источник -->
+<audio id="bgMusic" loop>
+    <source src="https://soundhelix.com" type="audio/mpeg">
 </audio>
 
-<!-- Конфетти -->
+<!-- Подключаем конфетти ПЕРЕД основным скриптом -->
 <script src="https://jsdelivr.net"></script>
 
 <script>
-    // Ждем полной загрузки страницы
-    window.onload = function() {
-        const goBtn = document.getElementById('goBtn');
-        const moreBtn = document.getElementById('moreBtn');
-        const closeBtn = document.getElementById('closeBtn');
-        const music = document.getElementById('bgMusic');
-        const out = document.getElementById('out');
-        const final = document.getElementById('final-msg');
-        const overlay = document.getElementById('overlay');
+    const goBtn = document.getElementById('goBtn');
+    const moreBtn = document.getElementById('moreBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const music = document.getElementById('bgMusic');
+    const out = document.getElementById('out');
+    const final = document.getElementById('final-msg');
+    const overlay = document.getElementById('overlay');
 
-        // Обработчик первой кнопки
-        goBtn.addEventListener('click', function() {
-            goBtn.style.display = 'none';
-            
-            // Запуск музыки
-            music.volume = 0.3;
-            music.play().catch(e => console.log("Audio play failed", e));
+    // Функция деплоя
+    goBtn.onclick = function() {
+        goBtn.style.display = 'none';
+        
+        // Звук (включается только по клику)
+        music.volume = 0.3;
+        music.play().catch(e => console.log("Браузер заблокировал звук"));
 
-            const logs = [
-                "> Initializing dark_matter.js...",
-                "> Loading Neuro-Health... [OK]",
-                "> Overriding Success_Limits... [DONE]",
-                "> Bypassing Stress_Firewall... [OK]",
-                "> Status: SYSTEM READY"
-            ];
+        const logs = [
+            "> Initializing dark_matter.js...",
+            "> Loading Neuro-Health... [OK]",
+            "> Overriding Success_Limits... [DONE]",
+            "> Bypassing Stress_Firewall... [OK]",
+            "> Status: SYSTEM READY"
+        ];
 
-            let step = 0;
-            const interval = setInterval(() => {
-                if (step < logs.length) {
-                    let div = document.createElement('div');
-                    div.className = 'line';
-                    div.textContent = logs[step];
-                    out.appendChild(div);
-                    step++;
-                } else {
-                    clearInterval(interval);
-                    final.style.display = 'block';
-                    moreBtn.style.display = 'block';
-                    // Запуск конфетти
-                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        let step = 0;
+        const interval = setInterval(() => {
+            if (step < logs.length) {
+                let div = document.createElement('div');
+                div.className = 'line';
+                div.textContent = logs[step];
+                out.appendChild(div);
+                step++;
+            } else {
+                clearInterval(interval);
+                final.style.display = 'block';
+                moreBtn.style.display = 'block';
+                
+                // Запуск конфетти (проверка библиотеки)
+                if (window.confetti) {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        zIndex: 999
+                    });
                 }
-            }, 600);
-        });
-
-        // Вторая кнопка (Changelog)
-        moreBtn.addEventListener('click', function() {
-            overlay.style.display = 'block';
-        });
-
-        // Кнопка закрытия
-        closeBtn.addEventListener('click', function() {
-            overlay.style.display = 'none';
-        });
+            }
+        }, 600);
     };
+
+    moreBtn.onclick = () => overlay.style.display = 'block';
+    closeBtn.onclick = () => overlay.style.display = 'none';
 </script>
 </body>
 </html>
