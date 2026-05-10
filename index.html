@@ -22,8 +22,6 @@
         h2 { color: #fff; border-bottom: 1px solid #00ff41; padding-bottom: 5px; margin-top: 25px; font-size: 1.2em; }
         .tag { font-weight: bold; color: #fff; }
         .desc { color: #888; margin-bottom: 10px; display: block; padding-left: 20px; }
-        
-        /* Индикатор звука */
         #sound-indicator { position: absolute; top: 10px; right: 10px; font-size: 0.7em; color: #333; }
     </style>
 </head>
@@ -38,7 +36,7 @@
     <button class="btn" id="goBtn" onclick="startApp()">./deploy_happiness.sh</button>
     
     <div id="final-msg">
-        С Днём Рождения!!! 🎂🚀<br>Пусть жизнь компилится без багов!
+        HAPPY BIRTHDAY! 🎂🚀<br>Пусть жизнь компилится без багов!
         <button class="btn" id="moreBtn" onclick="showWish()">view changelog_v44.0.txt</button>
     </div>
 </div>
@@ -50,56 +48,46 @@
         <p><i style="color: #888;">Release Notes: Стабильное обновление с масштабным улучшением производительности и новыми жизненными модулями.</i></p>
 
         <h2>🚀 Added (Новое в этой версии):</h2>
-        <span class="tag">Module "Unstoppable Wealth":</span>
-        <span class="desc">Внедрен алгоритм автоматического пополнения банковского счета.</span>
-        
-        <span class="tag">Feature "Ideal Body":</span>
-        <span class="desc">Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, тортиками и чебуреками.</span>
-        
-        <span class="tag">New Location:</span>
-        <span class="desc">Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
-        
-        <span class="tag">System "Smart Zen":</span>
-        <span class="desc">Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
+        <span class="tag">Module "Unstoppable Wealth":</span> <span class="desc">Внедрен алгоритм автоматического пополнения банковского счета.</span>
+        <span class="tag">Feature "Ideal Body":</span> <span class="desc">Добавлена встроенная поддержка отличной формы без конфликтов с пиццей и тортиками.</span>
+        <span class="tag">New Location:</span> <span class="desc">Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
+        <span class="tag">System "Smart Zen":</span> <span class="desc">Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
 
         <h2>🛠 Changed (Изменения и улучшения):</h2>
-        <span class="tag">Engine Update:</span>
-        <span class="desc">Личная энергия оптимизирована, время на «зарядку» сокращено, КПД увеличен на 100%.</span>
-        
-        <span class="tag">UI/UX:</span>
-        <span class="desc">Улыбка стала ярче, а взгляд — увереннее. Обновлены скины «Успешный успех» и «Спокойствие».</span>
-        
-        <span class="tag">Algorithm "Priority":</span>
-        <span class="desc">Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
+        <span class="tag">Engine Update:</span> <span class="desc">Личная энергия оптимизирована, КПД увеличен на 100%.</span>
+        <span class="tag">UI/UX:</span> <span class="desc">Улыбка стала ярче, а взгляд — увереннее. Обновлены скины «Успешный успех».</span>
+        <span class="tag">Algorithm "Priority":</span> <span class="desc">Система фокусируется на личных желаниях.</span>
 
         <h2>🩹 Fixed (Исправлено):</h2>
-        <span class="tag">Bug "Procrastination":</span>
-        <span class="desc">Исправлена ошибка, из-за которой важные дела откладывались на завтра.</span>
-        
-        <span class="tag">Issue "Stress":</span>
-        <span class="desc">Удалена критическая уязвимость, позволявшая мелким багам портить настроение.</span>
-        
-        <span class="tag">Depletion Fix:</span>
-        <span class="desc">Исправлена проблема быстрой разрядки аккумулятора в конце рабочей недели.</span>
+        <span class="tag">Bug "Procrastination":</span> <span class="desc">Исправлена ошибка, из-за которой дела откладывались на завтра.</span>
+        <span class="tag">Issue "Stress":</span> <span class="desc">Удалена критическая уязвимость настроения.</span>
 
         <h2>🗑 Removed (Удалено):</h2>
-        <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
-        <span class="line">• Очищен кэш прошлых обид и неудачных релизов.</span>
+        <span class="line">• Удалены устаревшие зависимости: токсичные люди и лишние страхи.</span>
+        <span class="line">• Очищен кэш прошлых обид.</span>
     </div>
 </div>
 
-<!-- Хакерский эмбиент -->
+<!-- Новая ссылка на музыку -->
 <audio id="bgMusic" loop>
-    <source src="https://soundhelix.com" type="audio/mpeg">
+    <source src="https://freemusicarchive.org" type="audio/mpeg">
 </audio>
 
-<script src="https://jsdelivr.net"></script>
+<!-- Рабочий скрипт конфетти -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <script>
-    function startApp() {
+    async function startApp() {
         const music = document.getElementById('bgMusic');
-        music.volume = 0.4;
-        music.play().catch(() => console.log("Музыка ждет взаимодействия"));
+        music.volume = 0.3;
+        
+        // Попытка запустить музыку
+        try {
+            await music.play();
+            document.getElementById('sound-indicator').style.color = '#00ff41';
+        } catch(e) {
+            console.log("Audio blocked by browser. Interaction required.");
+        }
 
         const out = document.getElementById('out');
         const btn = document.getElementById('goBtn');
@@ -107,31 +95,35 @@
         const moreBtn = document.getElementById('moreBtn');
         
         btn.style.display = 'none';
-        document.getElementById('sound-indicator').style.color = '#00ff41';
 
         const logs = [
             "> Initializing dark_matter.js...",
             "> Loading Neuro-Health... [OK]",
             "> Overriding Success_Limits... [DONE]",
             "> Bypassing Stress_Firewall... [OK]",
-            "> Status: SYSTEM READY FOR JACOB 44.0"
+            "> Status: SYSTEM READY"
         ];
 
-        let i = 0;
-        const interval = setInterval(() => {
-            if (i < logs.length) {
-                let div = document.createElement('div');
-                div.className = 'line';
-                div.textContent = logs[i];
-                out.appendChild(div);
-                i++;
-            } else {
-                clearInterval(interval);
-                final.style.display = 'block';
-                moreBtn.style.display = 'block';
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            }
-        }, 600);
+        for (let log of logs) {
+            let div = document.createElement('div');
+            div.className = 'line';
+            div.textContent = log;
+            out.appendChild(div);
+            await new Promise(r => setTimeout(r, 600));
+        }
+
+        final.style.display = 'block';
+        moreBtn.style.display = 'block';
+
+        // Проверка наличия функции и запуск конфетти
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                zIndex: 1000
+            });
+        }
     }
 
     function showWish() {
