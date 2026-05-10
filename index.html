@@ -3,129 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Dev Edition</title>
+    <title>Jacob 44.0 — System Update</title>
     <style>
-        body { background: #121212; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-        #terminal { width: 90%; max-width: 500px; background: #1e1e1e; padding: 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0,255,65,0.15); position: relative; z-index: 10; }
-        .btn { background: transparent; color: #00ff41; border: 1px solid #00ff41; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-size: 1.1em; transition: 0.3s; display: block; width: 100%; box-sizing: border-box; }
-        .btn:hover { background: rgba(0, 255, 65, 0.1); }
-        .line { margin: 8px 0; font-size: 0.9em; height: 1.2em; }
+        body { background: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        #terminal { width: 90%; max-width: 500px; background: #111; padding: 25px; border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0,255,65,0.2); position: relative; z-index: 10; }
+        .btn { background: #00ff41; color: #000; border: none; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
+        .btn:hover { background: #fff; }
+        .line { margin: 8px 0; font-size: 0.9em; border-left: 2px solid #00ff41; padding-left: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
         #final-msg { color: #fff; font-weight: bold; font-size: 1.2em; margin-top: 15px; display: none; text-align: center; }
-        
-        #moreBtn { display: none; border-color: #00ff41; color: #00ff41; }
-        #overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #121212; z-index: 100; padding: 20px; box-sizing: border-box;
-            overflow-y: auto; color: #00ff41; font-size: 0.95em;
-        }
-        .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; font-weight: bold; }
-        h2 { color: #fff; border-bottom: 1px solid #00ff41; padding-bottom: 5px; margin-top: 25px; font-size: 1.2em; }
-        .tag { font-weight: bold; color: #fff; }
-        .desc { color: #888; margin-bottom: 10px; display: block; padding-left: 20px; }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; padding: 20px; box-sizing: border-box; overflow-y: auto; color: #00ff41; }
+        .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; }
+        canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 99; }
+        .tag { font-weight: bold; color: #fff; display: block; margin-top: 10px; }
+        .desc { color: #888; display: block; padding-left: 15px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
+<canvas id="canvas"></canvas>
+
 <div id="terminal">
     <div id="out">
-        <div class="line">> System: Online</div>
-        <div class="line">> Ready for deployment...</div>
+        <div style="color:#888; margin-bottom: 10px;">// Jacob OS v.44.0 Personal Edition</div>
+        <div>> System: Online</div>
     </div>
-    <button class="btn" id="goBtn">./deploy_happiness.sh</button>
+    <button class="btn" id="goBtn" onclick="initSystem()">RUN DEPLOY_CELEBRATION.EXE</button>
     
     <div id="final-msg">
-        HAPPY BIRTHDAY! 🎂🚀<br>Пусть жизнь компилится без багов!
-        <button class="btn" id="moreBtn">view changelog_v44.0.txt</button>
+        [ SUCCESS ] SYSTEM UPDATED! 🎉<br>
+        <button class="btn" id="moreBtn" style="background:transparent; color:#00ff41; border:1px solid #00ff41;" onclick="showLog()">READ_CHANGELOG.LOG</button>
     </div>
 </div>
 
 <div id="overlay">
-    <span class="close-btn" id="closeBtn">[ close_file ]</span>
-    <div style="max-width: 650px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #1e1e1e;">
-        <h1 style="color: #fff; font-size: 1.4em; margin-top: 0;">Changelog: Version 44.0 — Jacob</h1>
-        <p><i style="color: #888;">Release Notes: Стабильное обновление с масштабным улучшением производительности и новыми жизненными модулями.</i></p>
+    <span class="close-btn" onclick="document.getElementById('overlay').style.display='none'">[ EXIT_TO_SHELL ]</span>
+    <div style="max-width: 600px; margin: 0 auto; line-height: 1.4;">
+        <h1 style="color: #fff;">Changelog: v44.0 — Jacob</h1>
+        <p><i>Стабильное обновление с масштабным улучшением производительности.</i></p>
+        <hr border="1" color="#00ff41">
+        <span class="tag">🚀 Added:</span>
+        <span class="desc">Module "Unstoppable Wealth": Авто-пополнение счета.</span>
+        <span class="desc">Feature "Ideal Body": Совместимость с пиццей 100%.</span>
+        <span class="desc">System "Smart Zen": Иммунитет к факапам.</span>
+        
+        <span class="tag">🛠 Changed:</span>
+        <span class="desc">Engine Update: Личный КПД увеличен на 100%.</span>
+        <span class="desc">UI/UX: Скин «Уверенность» активирован по умолчанию.</span>
 
-        <h2>🚀 Added (Новое в этой версии):</h2>
-        <span class="tag">Module "Unstoppable Wealth":</span> <span class="desc">Внедрен алгоритм автоматического пополнения банковского счета.</span>
-        <span class="tag">Feature "Ideal Body":</span> <span class="desc">Добавлена встроенная поддержка отличной формы без конфликтов с пиццей и тортиками.</span>
-        <span class="tag">New Location:</span> <span class="desc">Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
-        <span class="tag">System "Smart Zen":</span> <span class="desc">Полная невозмутимость при любых факапах.</span>
+        <span class="tag">🩹 Fixed:</span>
+        <span class="desc">Bug "Procrastination": Фикс критической ошибки лени.</span>
+        <span class="desc">Issue "Stress": Патч против плохого настроения.</span>
 
-        <h2>🛠 Changed (Изменения и улучшения):</h2>
-        <span class="tag">Engine Update:</span> <span class="desc">Личная энергия оптимизирована, КПД +100%.</span>
-        <span class="tag">UI/UX:</span> <span class="desc">Улыбка стала ярче, обновлены скины «Успех».</span>
-
-        <h2>🩹 Fixed (Исправлено):</h2>
-        <span class="tag">Bug "Procrastination":</span> <span class="desc">Исправлена ошибка откладывания дел.</span>
-        <span class="tag">Issue "Stress":</span> <span class="desc">Удалена критическая уязвимость настроения.</span>
-
-        <h2>🗑 Removed (Удалено):</h2>
-        <span class="line">• Удалены устаревшие зависимости: токсичные люди и лишние страхи.</span>
-        <span class="line">• Очищен кэш прошлых обид.</span>
+        <span class="tag">🗑 Removed:</span>
+        <span class="desc">- Удалены токсичные зависимости и пустые страхи.</span>
     </div>
 </div>
 
-<!-- Музыка: Альтернативный надежный источник -->
-<audio id="bgMusic" loop>
-    <source src="https://soundhelix.com" type="audio/mpeg">
-</audio>
-
-<!-- Подключаем конфетти ПЕРЕД основным скриптом -->
-<script src="https://jsdelivr.net"></script>
-
 <script>
-    const goBtn = document.getElementById('goBtn');
-    const moreBtn = document.getElementById('moreBtn');
-    const closeBtn = document.getElementById('closeBtn');
-    const music = document.getElementById('bgMusic');
-    const out = document.getElementById('out');
-    const final = document.getElementById('final-msg');
-    const overlay = document.getElementById('overlay');
+    // 1. Хакерский звук (синтезируем сами, чтобы не зависеть от файлов)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq, duration) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square'; // Хакерский "писклявый" звук
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
 
-    // Функция деплоя
-    goBtn.onclick = function() {
-        goBtn.style.display = 'none';
+    // 2. Встроенные конфетти (свой мини-движок)
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function createConfetti() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        for(let i=0; i<100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 7 + 3,
+                color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                vel: Math.random() * 3 + 2
+            });
+        }
+    }
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.y += p.vel;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        requestAnimationFrame(render);
+    }
+
+    // 3. Основная логика
+    async function initSystem() {
+        document.getElementById('goBtn').style.display = 'none';
         
-        // Звук (включается только по клику)
-        music.volume = 0.3;
-        music.play().catch(e => console.log("Браузер заблокировал звук"));
-
         const logs = [
-            "> Initializing dark_matter.js...",
-            "> Loading Neuro-Health... [OK]",
-            "> Overriding Success_Limits... [DONE]",
-            "> Bypassing Stress_Firewall... [OK]",
-            "> Status: SYSTEM READY"
+            "> Deleting '2023_stress.old'...",
+            "> Patching 'happiness_core.dll'...",
+            "> Booting Jacob_v44.0...",
+            "> Optimizing energy_cells...",
+            "> Deploying success.sh..."
         ];
 
-        let step = 0;
-        const interval = setInterval(() => {
-            if (step < logs.length) {
-                let div = document.createElement('div');
-                div.className = 'line';
-                div.textContent = logs[step];
-                out.appendChild(div);
-                step++;
-            } else {
-                clearInterval(interval);
-                final.style.display = 'block';
-                moreBtn.style.display = 'block';
-                
-                // Запуск конфетти (проверка библиотеки)
-                if (window.confetti) {
-                    confetti({
-                        particleCount: 150,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                        zIndex: 999
-                    });
-                }
-            }
-        }, 600);
-    };
+        for (let i = 0; i < logs.length; i++) {
+            playBeep(400 + (i * 100), 0.1); // Пищим при каждой строчке
+            let div = document.createElement('div');
+            div.className = 'line';
+            div.textContent = logs[i];
+            document.getElementById('out').appendChild(div);
+            await new Promise(r => setTimeout(r, 600));
+        }
 
-    moreBtn.onclick = () => overlay.style.display = 'block';
-    closeBtn.onclick = () => overlay.style.display = 'none';
+        document.getElementById('final-msg').style.display = 'block';
+        
+        // Запуск конфетти
+        createConfetti();
+        render();
+        // Финальный победный звук
+        playBeep(800, 0.5);
+    }
+
+    function showLog() {
+        document.getElementById('overlay').style.display = 'block';
+    }
 </script>
 </body>
 </html>
