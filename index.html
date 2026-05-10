@@ -84,31 +84,32 @@
         <h1 style="color: #fff;">Changelog: v4.4 — Jacob</h1>
         <p><i>Быстрее! Стабильнее! Твой Jacob в лучшей форме!</i></p>
         <hr border="1" color="#00ff41">
+
         <h2>🚀 Added (Новое в этой версии):</h2>
         <span class="tag-white">Module "Unstoppable Wealth":</span>
-        <span class="desc"> 💰 Внедрен алгоритм автоматического пополнения банковского счета.</span>
+        <span class="desc"> 💰Внедрен алгоритм автоматического пополнения банковского счета.</span>
         <span class="tag-white">Feature "Ideal Body":</span>
-        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тортиками.</span>
+        <span class="desc"> 🎂Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тортиками.</span>
         <span class="tag-white">System "Smart Zen":</span>
-        <span class="desc"> 🧘‍♂️ Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
+        <span class="desc"> 🧘‍♂️Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
         <span class="tag-white">New Location:</span>
-        <span class="desc"> 🗺️ Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
+        <span class="desc"> 🗺️Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
                       
         <h2>🛠 Changed (Изменения и улучшения):</h2>
         <span class="tag-white">Engine Update:</span>
-        <span class="desc"> 🔋 Личная энергия оптимизирована, время на «зарядку» сокращено.</span>
+        <span class="desc"> 🔋Личная энергия оптимизирована, время на «зарядку» сокращено.</span>
         <span class="tag-white">Engine Update:</span>
-        <span class="desc"> ⚡ Личный КПД увеличен на 100%.</span>
+        <span class="desc"> ⚡Личный КПД увеличен на 100%.</span>
         <span class="tag-white">UI/UX:</span>
-        <span class="desc"> 😎 Скин «Уверенность» активирован по умолчанию.</span>
+        <span class="desc"> 😎Скин «Уверенность» активирован по умолчанию.</span>
         <span class="tag-white">Algorithm "Priority":</span>
-        <span class="desc"> 👌 Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
+        <span class="desc"> 👌Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
 
         <h2>🩹 Fixed:</h2>
         <span class="tag-white">Bug "Procrastination":</span>
-        <span class="desc"> 🤏 Фикс критической ошибки лени.</span>
+        <span class="desc"> 🤏Фикс критической ошибки лени.</span>
         <span class="tag-white">Issue "Stress"</span>
-        <span class="desc">:🎯 Удалена критическая уязвимость, позволявшая мелким багам портить настроение.Патч против плохого настроения.</span>
+        <span class="desc">:🎯Удалена критическая уязвимость, позволявшая мелким багам портить настроение.Патч против плохого настроения.</span>
 
         <h2>🗑 Removed:</h2>
         <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
@@ -174,31 +175,49 @@
             document.getElementById('final-msg').style.display = 'block';
         }, 500);
     }
-    let rabbitInterval = null; 
     function showLog() { 
     // 1. Открываем окно
-    document.getElementById('overlay').style.display = 'block';
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.style.display = 'block';
     
-    // 2. Запускаем зайца
+    // 2. Переключаем музыку
+    const oldMusic = document.getElementById('bgMusic');
+    const newMusic = document.getElementById('changelogMusic');
+    
+    if (oldMusic) oldMusic.pause(); 
+    if (newMusic) {
+        newMusic.volume = 0.4;
+        newMusic.play().catch(e => console.log("Ошибка воспроизведения трека 2"));
+    }
+
+    // 3. Запускаем зайца
     moveRabbit();
     
-    // 3. Запускаем встроенные конфетти (рисуем прямо на холсте матрицы)
-    createInternalConfetti();
-}
-
-// Встроенная функция создания конфетти (не требует внешних библиотек)
-function createInternalConfetti() {
-    const canvas = document.getElementById('canvas'); // Используем тот же холст, что и для матрицы
-    if (!canvas) return;
+    // 4. Запускаем конфетти (внешние и встроенные для надежности)
+    if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            zIndex: 1001 
+        });
+    }
     
-    // Генерируем 100 частиц
+    createInternalConfetti(); 
+} // Конец функции showLog (лишние скобки удалены)
+
+// Встроенная функция создания конфетти
+function createInternalConfetti() {
+    const canvas = document.getElementById('canvas'); 
+    if (!canvas || !particles) return; // particles должен быть объявлен глобально выше
+    
     for(let i = 0; i < 100; i++) {
         particles.push({
             x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height, // Начинаем от центра или сверху
+            y: Math.random() * canvas.height,
             size: Math.random() * 8 + 4,
             color: `hsl(${Math.random() * 360}, 80%, 60%)`,
-            vel: Math.random() * 6 + 4, // Скорость падения
+            vel: Math.random() * 6 + 4,
             rot: Math.random() * 360
         });
     }
@@ -211,7 +230,7 @@ function moveRabbit() {
 
     rabbitStarted = true;
     setInterval(() => {
-        const x = Math.random() * 60 - 30; // Чуть больше амплитуда
+        const x = Math.random() * 60 - 30;
         const y = Math.random() * 40 - 20;
         r.style.transform = `translate(${x}px, ${y}px)`;
     }, 500);
