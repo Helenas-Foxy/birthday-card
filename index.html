@@ -189,38 +189,39 @@
     }
 
     // ПАСХАЛКА: Создание объектов
-    function spawnEasterEggs() {
+        function spawnEasterEggs() {
         playBeep(600, 0.2);
+        
+        // 1. Проверь, чтобы названия свойств были именно img и text
         const data = [
-            { img: "images/gnome.png", text: "Мы, гномы, такие - 1,56" },
-            { img: "images/fox.png", text: "Нет в мире совершенства!" },
-            { img: "images/spider.png", text: "Паучара..." },
-            { img: "images/tiger.png", text: "Я умею рычать!" },
-            { img: "images/rabbit.png", text: "Зай, я фсё..." },
-            { img: "images/anchor.png", text: "Якорёчки-якоря" },
-            { img: "images/westham.jpg", text: "West Ham United forever in my heart" },
-            { img: "images/kuniman.png", text: "Присаживайся)" },
-            { img: "images/button.png", text: "Нажимаааю!!!!" }
+            { img: "images/gnome.png", text: "Гном с косичками" },
+            { img: "images/fox.jpg", text: "Лис (Маленький Принц)" },
+            { img: "images/spider.png", text: "Паук с паутиной" },
+            { img: "images/tiger.jpg", text: "Оскал Тигра" },
+            { img: "images/fat_rabbit.png", text: "Зай, я фсё..." },
+            { img: "images/anchor.png", text: "Якорёчки-якоря" }, // Текст со скрина
+            { img: "images/westham.png", text: "West Ham United" },
+            { img: "images/kuniman.png", text: "Kuniman" }
         ];
 
-         data.forEach((item, index) => {
-            // Появление каждого объекта через 1.2 секунды (очень медленно и вдумчиво)
+        data.forEach((item, index) => {
             setTimeout(() => {
                 const el = document.createElement('div');
                 el.className = 'easter-obj';
-                el.innerHTML = `<div style="font-size:40px; margin-bottom:5px;">${item.icon}</div>
-                                <div style="font-weight:bold; letter-spacing:1px;">${item.text}</div>`;
                 
-                // Случайное положение по всему экрану
+                // 2. ИСПРАВЛЕНИЕ: Используем item.img для картинки и item.text для подписи
+                el.innerHTML = `
+                    <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
+                    <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
+                `;
+                
                 el.style.left = Math.random() * 60 + 20 + "%";
                 el.style.top = Math.random() * 60 + 20 + "%";
-                
                 document.body.appendChild(el);
                 
-                // Объект живет 10 секунд (согласно анимации CSS)
                 setTimeout(() => el.remove(), 10000);
-            }, index * 1200); 
-        });
+            }, index * 1200);
+        }); // Здесь должны быть эти две скобки!
     }
 
     function update() { drawMatrix(); requestAnimationFrame(update); }
