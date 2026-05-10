@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -87,29 +86,29 @@
 
         <h2>🚀 Added (Новое в этой версии):</h2>
         <span class="tag-white">Module "Unstoppable Wealth":</span>
-        <span class="desc"> 💰Внедрен алгоритм автоматического пополнения банковского счета.</span>
+        <span class="desc"> 💰 Внедрен алгоритм автоматического пополнения банковского счета.</span>
         <span class="tag-white">Feature "Ideal Body":</span>
-        <span class="desc"> 🎂Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тортиками.</span>
+        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тортиками.</span>
         <span class="tag-white">System "Smart Zen":</span>
-        <span class="desc"> 🧘‍♂️Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
+        <span class="desc"> 🧘‍♂️ Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
         <span class="tag-white">New Location:</span>
-        <span class="desc"> 🗺️Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
+        <span class="desc"> 🗺️ Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
                       
         <h2>🛠 Changed (Изменения и улучшения):</h2>
         <span class="tag-white">Engine Update:</span>
-        <span class="desc"> 🔋Личная энергия оптимизирована, время на «зарядку» сокращено.</span>
+        <span class="desc"> 🔋 Личная энергия оптимизирована, время на «зарядку» сокращено.</span>
         <span class="tag-white">Engine Update:</span>
-        <span class="desc"> ⚡Личный КПД увеличен на 100%.</span>
+        <span class="desc"> ⚡ Личный КПД увеличен на 100%.</span>
         <span class="tag-white">UI/UX:</span>
-        <span class="desc"> 😎Скин «Уверенность» активирован по умолчанию.</span>
+        <span class="desc"> 😎 Скин «Уверенность» активирован по умолчанию.</span>
         <span class="tag-white">Algorithm "Priority":</span>
-        <span class="desc"> 👌Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
+        <span class="desc"> 👌 Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
 
         <h2>🩹 Fixed:</h2>
         <span class="tag-white">Bug "Procrastination":</span>
-        <span class="desc"> 🤏Фикс критической ошибки лени.</span>
+        <span class="desc"> 🤏 Фикс критической ошибки лени.</span>
         <span class="tag-white">Issue "Stress"</span>
-        <span class="desc">:🎯Удалена критическая уязвимость, позволявшая мелким багам портить настроение.Патч против плохого настроения.</span>
+        <span class="desc">:🎯 Удалена критическая уязвимость, позволявшая мелким багам портить настроение.Патч против плохого настроения.</span>
 
         <h2>🗑 Removed:</h2>
         <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
@@ -183,7 +182,7 @@
     // 2. Переключаем музыку
     const oldMusic = document.getElementById('bgMusic');
     const newMusic = document.getElementById('changelogMusic');
-    
+    update
     if (oldMusic) oldMusic.pause(); 
     if (newMusic) {
         newMusic.volume = 0.4;
@@ -209,15 +208,15 @@
 // Встроенная функция создания конфетти
 function createInternalConfetti() {
     const canvas = document.getElementById('canvas'); 
-    if (!canvas || !particles) return; // particles должен быть объявлен глобально выше
+    if (!canvas) return;
     
     for(let i = 0; i < 100; i++) {
         particles.push({
             x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
+            y: -20, // Начинаем чуть выше экрана
             size: Math.random() * 8 + 4,
             color: `hsl(${Math.random() * 360}, 80%, 60%)`,
-            vel: Math.random() * 6 + 4,
+            vel: Math.random() * 5 + 2, // Скорость падения
             rot: Math.random() * 360
         });
     }
@@ -242,7 +241,7 @@ function moveRabbit() {
         
         // 1. Проверь, чтобы названия свойств были именно img и text
         const data = [
-            { img: "images/gnome.jpg", text: "Мы, гномы, такие - 1,56" },
+            { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
             { img: "images/fox.png", text: "Нет в мире совершенства!" },
             { img: "images/spider.png", text: "Паучара..." },
             { img: "images/tiger.png", text: "Я могу и зарычать..." },
@@ -273,8 +272,32 @@ function moveRabbit() {
         }); // Здесь должны быть эти две скобки!
     }
 
-    function update() { drawMatrix(); requestAnimationFrame(update); }
-    update();
+    function animate() {
+    drawMatrix(); // Рисуем фон матрицы
+    
+    // ДОБАВЛЕНО: Рисуем и двигаем конфетти
+    if (particles.length > 0) {
+        particles.forEach((p, index) => {
+            p.y += p.vel; // Двигаем вниз
+            p.rot += 5;   // Вращаем
+            
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot * Math.PI / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+            ctx.restore();
+
+            // Удаляем частицу, если она улетела за экран
+            if (p.y > canvas.height) {
+                particles.splice(index, 1);
+            }
+        });
+    }
+    
+    requestAnimationFrame(animate);
+}
+
 </script>
 </body>
 </html>
