@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jacob 44.0 — System Update</title>
+    <title>Jacob 4.4 — System Update</title>
     <style>
         body { background: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-        #terminal { width: 90%; max-width: 500px; background: #111; padding: 25px; border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0,255,65,0.2); position: relative; z-index: 10; }
+        
+        /* Холст для матрицы и конфетти */
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+
+        #terminal { 
+            width: 90%; max-width: 500px; background: rgba(17, 17, 17, 0.9); padding: 25px; 
+            border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0,255,65,0.2); 
+            position: relative; z-index: 10; 
+        }
+
+        /* Эффект дрожания (глитч) */
+        .shake { animation: shake 0.2s infinite; }
+        @keyframes shake {
+            0% { transform: translate(2px, 1px); }
+            25% { transform: translate(-2px, -1px); }
+            50% { transform: translate(-1px, 2px); }
+            75% { transform: translate(1px, -2px); }
+            100% { transform: translate(0, 0); }
+        }
+
         .btn { background: #00ff41; color: #000; border: none; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
         .btn:hover { background: #fff; }
         .line { margin: 8px 0; font-size: 0.9em; border-left: 2px solid #00ff41; padding-left: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
@@ -14,7 +33,6 @@
         #final-msg { color: #fff; font-weight: bold; font-size: 1.2em; margin-top: 15px; display: none; text-align: center; }
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; padding: 20px; box-sizing: border-box; overflow-y: auto; color: #00ff41; }
         .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; }
-        canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 99; }
         .tag { font-weight: bold; color: #fff; display: block; margin-top: 10px; }
         .desc { color: #888; display: block; padding-left: 15px; margin-bottom: 5px; }
     </style>
@@ -25,13 +43,13 @@
 
 <div id="terminal">
     <div id="out">
-        <div style="color:#888; margin-bottom: 10px;">// Jacob OS v.44.0 Personal Edition</div>
+        <div style="color:#888; margin-bottom: 10px;">// Jacob OS v.4.4 Personal Edition</div>
         <div>> System: Online</div>
     </div>
     <button class="btn" id="goBtn" onclick="initSystem()">RUN DEPLOY_CELEBRATION.EXE</button>
     
     <div id="final-msg">
-        С Днём рождения!!! 🎉<br> Пусть жизнь компилится без багов!
+        Happy birthday, Jacob 🎉<br> Пусть жизнь компилится без багов!
         <button class="btn" id="moreBtn" style="background:transparent; color:#00ff41; border:1px solid #00ff41;" onclick="showLog()">READ_CHANGELOG.LOG</button>
     </div>
 </div>
@@ -71,31 +89,54 @@
         <h2>🗑 Removed:</h2>
         <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
         <span class="line">• Очищен кэш прошлых обид и неудачных релизов.👌👌👌</span>
+
     </div>
 </div>
 
 <script>
-    // 1. Хакерский звук (синтезируем сами, чтобы не зависеть от файлов)
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let matrixCols = [];
+    const charSet = "0123456789ABCDEFHIJKLMNOPQRSTUVXYZ@#$+-*";
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const columns = Math.floor(canvas.width / 20);
+        for (let i = 0; i < columns; i++) matrixCols[i] = 1;
+    }
+    window.onresize = resize;
+    resize();
+
+    // Эффект матрицы на фоне
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#003300";
+        ctx.font = "15px monospace";
+        for (let i = 0; i < matrixCols.length; i++) {
+            const text = charSet[Math.floor(Math.random() * charSet.length)];
+            ctx.fillText(text, i * 20, matrixCols[i] * 20);
+            if (matrixCols[i] * 20 > canvas.height && Math.random() > 0.975) matrixCols[i] = 0;
+            matrixCols[i]++;
+        }
+    }
+
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(freq, duration) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'square'; // Хакерский "писклявый" звук
+        osc.type = 'square';
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + duration);
     }
 
-    // 2. Встроенные конфетти (свой мини-движок)
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
     function createConfetti() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
         for(let i=0; i<100; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
@@ -106,22 +147,24 @@
             });
         }
     }
-    function render() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    function animate() {
+        drawMatrix();
         particles.forEach(p => {
             p.y += p.vel;
             ctx.fillStyle = p.color;
             ctx.fillRect(p.x, p.y, p.size, p.size);
         });
-        requestAnimationFrame(render);
+        requestAnimationFrame(animate);
     }
+    animate();
 
-    // 3. Основная логика
     async function initSystem() {
         document.getElementById('goBtn').style.display = 'none';
+        const terminal = document.getElementById('terminal');
         
         const logs = [
-            "> Deleting '2025_stress.old'...",
+            "> Deleting '2023_stress.old'...",
             "> Patching 'happiness_core.dll'...",
             "> Booting Jacob_v44.0...",
             "> Optimizing energy_cells...",
@@ -129,7 +172,7 @@
         ];
 
         for (let i = 0; i < logs.length; i++) {
-            playBeep(400 + (i * 100), 0.1); // Пищим при каждой строчке
+            playBeep(400 + (i * 100), 0.1);
             let div = document.createElement('div');
             div.className = 'line';
             div.textContent = logs[i];
@@ -137,13 +180,16 @@
             await new Promise(r => setTimeout(r, 600));
         }
 
-        document.getElementById('final-msg').style.display = 'block';
+        // Финальный Глитч перед успехом
+        terminal.classList.add('shake');
+        playBeep(200, 0.2); 
         
-        // Запуск конфетти
-        createConfetti();
-        render();
-        // Финальный победный звук
-        playBeep(800, 0.5);
+        setTimeout(() => {
+            terminal.classList.remove('shake');
+            document.getElementById('final-msg').style.display = 'block';
+            createConfetti();
+            playBeep(800, 0.5);
+        }, 400);
     }
 
     function showLog() {
