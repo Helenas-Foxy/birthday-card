@@ -176,7 +176,20 @@
         }, 500);
     }
 
-    function showLog() { document.getElementById('overlay').style.display = 'block'; moveRabbit(); }
+    function showLog() { 
+        document.getElementById('overlay').style.display = 'block';
+        if (!rabbitInterval) {
+        moveRabbit();
+        }
+        if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            zIndex: 1001 
+        });
+    }
+} // <-- Обязательная скобка здесь
 
     // Прыгающий заяц
     function moveRabbit() {
