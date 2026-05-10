@@ -2,108 +2,145 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>System Update: Birthday Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Dev Edition</title>
     <style>
-        body {
-            background-color: #121212;
-            color: #00ff41; /* Цвет классического терминала */
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+        body { background: #121212; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        #terminal { width: 90%; max-width: 500px; background: #1e1e1e; padding: 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0,255,65,0.15); position: relative; z-index: 10; }
+        .btn { background: transparent; color: #00ff41; border: 1px solid #00ff41; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-size: 1.1em; transition: 0.3s; }
+        .btn:hover { background: rgba(0, 255, 65, 0.1); }
+        .line { margin: 8px 0; font-size: 0.9em; }
+        #final-msg { color: #fff; font-weight: bold; font-size: 1.2em; margin-top: 15px; display: none; }
+        
+        #moreBtn { display: none; border-color: #00ff41; color: #00ff41; margin-top: 15px; }
+        #overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #121212; z-index: 100; padding: 20px; box-sizing: border-box;
+            overflow-y: auto; color: #00ff41; font-size: 0.95em;
         }
-        #terminal {
-            width: 80%;
-            max-width: 600px;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-            border: 1px solid #333;
-        }
-        .btn {
-            background: transparent;
-            color: #00ff41;
-            border: 1px solid #00ff41;
-            padding: 10px 20px;
-            font-family: inherit;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            background: #00ff41;
-            color: #121212;
-        }
-        .line { margin-bottom: 5px; min-height: 1.2em; }
-        .hidden { display: none; }
-        #canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+        .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; font-weight: bold; }
+        h2 { color: #fff; border-bottom: 1px solid #00ff41; padding-bottom: 5px; margin-top: 25px; font-size: 1.2em; }
+        .tag { font-weight: bold; color: #fff; }
+        .desc { color: #888; margin-bottom: 10px; display: block; padding-left: 20px; }
+        
+        /* Индикатор звука */
+        #sound-indicator { position: absolute; top: 10px; right: 10px; font-size: 0.7em; color: #333; }
     </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
-
 <div id="terminal">
-    <div id="output">
-        <div class="line">> System ready...</div>
-        <div class="line">> Awaiting user action...</div>
+    <div id="sound-indicator">🔈 AUDIO_READY</div>
+    <div id="out">
+        <div class="line">> System: Online</div>
+        <div class="line">> Ready for deployment...</div>
     </div>
-    <button class="btn" id="startBtn">./deploy_happiness.sh</button>
+    <button class="btn" id="goBtn" onclick="startApp()">./deploy_happiness.sh</button>
+    
+    <div id="final-msg">
+        С Днём Рождения!!! 🎂🚀<br>Пусть жизнь компилится без багов!
+        <button class="btn" id="moreBtn" onclick="showWish()">view changelog_v44.0.txt</button>
+    </div>
 </div>
 
-<!-- Подключаем библиотеку для конфетти -->
+<div id="overlay">
+    <span class="close-btn" onclick="closeWish()">[ close_file ]</span>
+    <div style="max-width: 650px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #1e1e1e;">
+        <h1 style="color: #fff; font-size: 1.4em; margin-top: 0;">Changelog: Version 44.0 — Jacob</h1>
+        <p><i style="color: #888;">Release Notes: Стабильное обновление с масштабным улучшением производительности и новыми жизненными модулями.</i></p>
+
+        <h2>🚀 Added (Новое в этой версии):</h2>
+        <span class="tag">Module "Unstoppable Wealth":</span>
+        <span class="desc">Внедрен алгоритм автоматического пополнения банковского счета.</span>
+        
+        <span class="tag">Feature "Ideal Body":</span>
+        <span class="desc">Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, тортиками и чебуреками.</span>
+        
+        <span class="tag">New Location:</span>
+        <span class="desc">Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
+        
+        <span class="tag">System "Smart Zen":</span>
+        <span class="desc">Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
+
+        <h2>🛠 Changed (Изменения и улучшения):</h2>
+        <span class="tag">Engine Update:</span>
+        <span class="desc">Личная энергия оптимизирована, время на «зарядку» сокращено, КПД увеличен на 100%.</span>
+        
+        <span class="tag">UI/UX:</span>
+        <span class="desc">Улыбка стала ярче, а взгляд — увереннее. Обновлены скины «Успешный успех» и «Спокойствие».</span>
+        
+        <span class="tag">Algorithm "Priority":</span>
+        <span class="desc">Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
+
+        <h2>🩹 Fixed (Исправлено):</h2>
+        <span class="tag">Bug "Procrastination":</span>
+        <span class="desc">Исправлена ошибка, из-за которой важные дела откладывались на завтра.</span>
+        
+        <span class="tag">Issue "Stress":</span>
+        <span class="desc">Удалена критическая уязвимость, позволявшая мелким багам портить настроение.</span>
+        
+        <span class="tag">Depletion Fix:</span>
+        <span class="desc">Исправлена проблема быстрой разрядки аккумулятора в конце рабочей недели.</span>
+
+        <h2>🗑 Removed (Удалено):</h2>
+        <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
+        <span class="line">• Очищен кэш прошлых обид и неудачных релизов.</span>
+    </div>
+</div>
+
+<!-- Хакерский эмбиент -->
+<audio id="bgMusic" loop>
+    <source src="https://soundhelix.com" type="audio/mpeg">
+</audio>
+
 <script src="https://jsdelivr.net"></script>
 
 <script>
-    const output = document.getElementById('output');
-    const btn = document.getElementById('startBtn');
-    
-    const logs = [
-        "> Initializing birthday protocols...",
-        "> Loading health.dll [##########] 100%",
-        "> Loading wealth.js [##########] 100%",
-        "> Optimizing luck_index.py...",
-        "> Compiling 'Success' module...",
-        "> Bug check: 0 bugs found.",
-        "> STATUS: READY TO CELEBRATE!"
-    ];
+    function startApp() {
+        const music = document.getElementById('bgMusic');
+        music.volume = 0.4;
+        music.play().catch(() => console.log("Музыка ждет взаимодействия"));
 
-    async function startDeployment() {
-        btn.classList.add('hidden');
+        const out = document.getElementById('out');
+        const btn = document.getElementById('goBtn');
+        const final = document.getElementById('final-msg');
+        const moreBtn = document.getElementById('moreBtn');
         
-        for (let log of logs) {
-            const line = document.createElement('div');
-            line.className = 'line';
-            line.textContent = log;
-            output.appendChild(line);
-            await new Promise(r => setTimeout(r, 600)); // Задержка между строками
-        }
+        btn.style.display = 'none';
+        document.getElementById('sound-indicator').style.color = '#00ff41';
 
-        // Финальное сообщение
-        const final = document.createElement('div');
-        final.style.color = '#fff';
-        final.style.fontSize = '1.5em';
-        final.style.marginTop = '20px';
-        final.innerHTML = "<br>С днём рождения!<br>Пусть твой код всегда компилится, а жизнь не багует! 🎂🚀";
-        output.appendChild(final);
+        const logs = [
+            "> Initializing dark_matter.js...",
+            "> Loading Neuro-Health... [OK]",
+            "> Overriding Success_Limits... [DONE]",
+            "> Bypassing Stress_Firewall... [OK]",
+            "> Status: SYSTEM READY FOR JACOB 44.0"
+        ];
 
-        // Запуск конфетти
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#00ff41', '#ffffff', '#ff00ff']
-        });
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < logs.length) {
+                let div = document.createElement('div');
+                div.className = 'line';
+                div.textContent = logs[i];
+                out.appendChild(div);
+                i++;
+            } else {
+                clearInterval(interval);
+                final.style.display = 'block';
+                moreBtn.style.display = 'block';
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+        }, 600);
     }
 
-    btn.addEventListener('click', startDeployment);
-</script>
+    function showWish() {
+        document.getElementById('overlay').style.display = 'block';
+    }
 
+    function closeWish() {
+        document.getElementById('overlay').style.display = 'none';
+    }
+</script>
 </body>
 </html>
-
