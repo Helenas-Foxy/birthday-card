@@ -7,12 +7,12 @@
     <style>
         body { background: #121212; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         #terminal { width: 90%; max-width: 500px; background: #1e1e1e; padding: 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0,255,65,0.15); position: relative; z-index: 10; }
-        .btn { background: transparent; color: #00ff41; border: 1px solid #00ff41; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-size: 1.1em; transition: 0.3s; }
+        .btn { background: transparent; color: #00ff41; border: 1px solid #00ff41; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-size: 1.1em; transition: 0.3s; display: block; text-align: center; text-decoration: none; }
         .btn:hover { background: rgba(0, 255, 65, 0.1); }
         .line { margin: 8px 0; font-size: 0.9em; }
         #final-msg { color: #fff; font-weight: bold; font-size: 1.2em; margin-top: 15px; display: none; }
         
-        #moreBtn { display: none; border-color: #00ff41; color: #00ff41; margin-top: 15px; }
+        #moreBtn { display: none; border-color: #00ff41; color: #00ff41; }
         #overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #121212; z-index: 100; padding: 20px; box-sizing: border-box;
@@ -22,27 +22,25 @@
         h2 { color: #fff; border-bottom: 1px solid #00ff41; padding-bottom: 5px; margin-top: 25px; font-size: 1.2em; }
         .tag { font-weight: bold; color: #fff; }
         .desc { color: #888; margin-bottom: 10px; display: block; padding-left: 20px; }
-        #sound-indicator { position: absolute; top: 10px; right: 10px; font-size: 0.7em; color: #333; }
     </style>
 </head>
 <body>
 
 <div id="terminal">
-    <div id="sound-indicator">🔈 AUDIO_READY</div>
     <div id="out">
         <div class="line">> System: Online</div>
         <div class="line">> Ready for deployment...</div>
     </div>
-    <button class="btn" id="goBtn" onclick="startApp()">./deploy_happiness.sh</button>
+    <button class="btn" id="goBtn">./deploy_happiness.sh</button>
     
     <div id="final-msg">
         HAPPY BIRTHDAY! 🎂🚀<br>Пусть жизнь компилится без багов!
-        <button class="btn" id="moreBtn" onclick="showWish()">view changelog_v44.0.txt</button>
+        <button class="btn" id="moreBtn">view changelog_v44.0.txt</button>
     </div>
 </div>
 
 <div id="overlay">
-    <span class="close-btn" onclick="closeWish()">[ close_file ]</span>
+    <span class="close-btn" id="closeBtn">[ close_file ]</span>
     <div style="max-width: 650px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #1e1e1e;">
         <h1 style="color: #fff; font-size: 1.4em; margin-top: 0;">Changelog: Version 44.0 — Jacob</h1>
         <p><i style="color: #888;">Release Notes: Стабильное обновление с масштабным улучшением производительности и новыми жизненными модулями.</i></p>
@@ -68,71 +66,69 @@
     </div>
 </div>
 
-<!-- Новая ссылка на музыку -->
-<audio id="bgMusic" loop>
-    <source src="https://freemusicarchive.org" type="audio/mpeg">
+<!-- Музыка: Прямая ссылка на хакерский трек -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://pixabay.com" type="audio/mpeg">
 </audio>
 
-<!-- Рабочий скрипт конфетти -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<!-- Конфетти -->
+<script src="https://jsdelivr.net"></script>
 
 <script>
-    async function startApp() {
-        const music = document.getElementById('bgMusic');
-        music.volume = 0.3;
-        
-        // Попытка запустить музыку
-        try {
-            await music.play();
-            document.getElementById('sound-indicator').style.color = '#00ff41';
-        } catch(e) {
-            console.log("Audio blocked by browser. Interaction required.");
-        }
-
-        const out = document.getElementById('out');
-        const btn = document.getElementById('goBtn');
-        const final = document.getElementById('final-msg');
+    // Ждем полной загрузки страницы
+    window.onload = function() {
+        const goBtn = document.getElementById('goBtn');
         const moreBtn = document.getElementById('moreBtn');
-        
-        btn.style.display = 'none';
+        const closeBtn = document.getElementById('closeBtn');
+        const music = document.getElementById('bgMusic');
+        const out = document.getElementById('out');
+        const final = document.getElementById('final-msg');
+        const overlay = document.getElementById('overlay');
 
-        const logs = [
-            "> Initializing dark_matter.js...",
-            "> Loading Neuro-Health... [OK]",
-            "> Overriding Success_Limits... [DONE]",
-            "> Bypassing Stress_Firewall... [OK]",
-            "> Status: SYSTEM READY"
-        ];
+        // Обработчик первой кнопки
+        goBtn.addEventListener('click', function() {
+            goBtn.style.display = 'none';
+            
+            // Запуск музыки
+            music.volume = 0.3;
+            music.play().catch(e => console.log("Audio play failed", e));
 
-        for (let log of logs) {
-            let div = document.createElement('div');
-            div.className = 'line';
-            div.textContent = log;
-            out.appendChild(div);
-            await new Promise(r => setTimeout(r, 600));
-        }
+            const logs = [
+                "> Initializing dark_matter.js...",
+                "> Loading Neuro-Health... [OK]",
+                "> Overriding Success_Limits... [DONE]",
+                "> Bypassing Stress_Firewall... [OK]",
+                "> Status: SYSTEM READY"
+            ];
 
-        final.style.display = 'block';
-        moreBtn.style.display = 'block';
+            let step = 0;
+            const interval = setInterval(() => {
+                if (step < logs.length) {
+                    let div = document.createElement('div');
+                    div.className = 'line';
+                    div.textContent = logs[step];
+                    out.appendChild(div);
+                    step++;
+                } else {
+                    clearInterval(interval);
+                    final.style.display = 'block';
+                    moreBtn.style.display = 'block';
+                    // Запуск конфетти
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                }
+            }, 600);
+        });
 
-        // Проверка наличия функции и запуск конфетти
-        if (typeof confetti === 'function') {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                zIndex: 1000
-            });
-        }
-    }
+        // Вторая кнопка (Changelog)
+        moreBtn.addEventListener('click', function() {
+            overlay.style.display = 'block';
+        });
 
-    function showWish() {
-        document.getElementById('overlay').style.display = 'block';
-    }
-
-    function closeWish() {
-        document.getElementById('overlay').style.display = 'none';
-    }
+        // Кнопка закрытия
+        closeBtn.addEventListener('click', function() {
+            overlay.style.display = 'none';
+        });
+    };
 </script>
 </body>
 </html>
