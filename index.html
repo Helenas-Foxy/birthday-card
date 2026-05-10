@@ -32,13 +32,26 @@
 
         /* Вылетающие объекты */
         .easter-obj { 
-            position: fixed; z-index: 200; pointer-events: none; background: rgba(0,0,0,0.8);
-            border: 1px solid #00ff41; padding: 10px; border-radius: 8px; text-align: center;
-            animation: floatObj 4s forwards; font-size: 14px; color: #fff;
+            position: fixed; 
+            z-index: 200; 
+            pointer-events: none; 
+            background: rgba(0,0,0,0.85);
+            border: 2px solid #00ff41; 
+            padding: 15px; 
+            border-radius: 12px; 
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0,255,101,0.3);
+            /* Анимация появления и долгого плавания */
+            animation: floatAround 10s ease-in-out forwards; 
         }
-        @keyframes floatObj {
-            0% { transform: scale(0) rotate(0deg); opacity: 1; }
-            100% { transform: scale(1.2) translateY(-200px) rotate(360deg); opacity: 0; }
+
+        @keyframes floatAround {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            10% { transform: scale(1) rotate(5deg); opacity: 1; }
+            50% { transform: scale(1.1) translate(20px, -30px) rotate(-5deg); }
+            90% { opacity: 1; }
+            100% { transform: scale(0.8) translate(-20px, -60px) rotate(10deg); opacity: 0; }
         }
     </style>
 </head>
@@ -65,6 +78,7 @@
         <h1 style="color: #fff;">Changelog: v4.4 — Jacob</h1>
         <p><i>Стабильное обновление с масштабным улучшением производительности.</i></p>
         <hr border="1" color="#00ff41">
+
         <h2>🚀 Added (Новое в этой версии):</h2>
         <span class="tag">Module "Unstoppable Wealth":</span>
         <span class="desc"> 💰Внедрен алгоритм автоматического пополнения банковского счета.</span>
@@ -182,16 +196,23 @@
             { icon: "👑", text: "Kuniman" }
         ];
 
-        data.forEach((item, index) => {
+         data.forEach((item, index) => {
+            // Появление каждого объекта через 1.2 секунды (очень медленно и вдумчиво)
             setTimeout(() => {
                 const el = document.createElement('div');
                 el.className = 'easter-obj';
-                el.innerHTML = `<div style="font-size:30px">${item.icon}</div><div>${item.text}</div>`;
-                el.style.left = Math.random() * 70 + 15 + "%";
-                el.style.top = Math.random() * 70 + 15 + "%";
+                el.innerHTML = `<div style="font-size:40px; margin-bottom:5px;">${item.icon}</div>
+                                <div style="font-weight:bold; letter-spacing:1px;">${item.text}</div>`;
+                
+                // Случайное положение по всему экрану
+                el.style.left = Math.random() * 60 + 20 + "%";
+                el.style.top = Math.random() * 60 + 20 + "%";
+                
                 document.body.appendChild(el);
-                setTimeout(() => el.remove(), 4000);
-            }, index * 200);
+                
+                // Объект живет 10 секунд (согласно анимации CSS)
+                setTimeout(() => el.remove(), 10000);
+            }, index * 1200); 
         });
     }
 
