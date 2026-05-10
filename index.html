@@ -175,7 +175,7 @@
             document.getElementById('final-msg').style.display = 'block';
         }, 500);
     }
-
+    let rabbitInterval = null; 
     function showLog() { 
         document.getElementById('overlay').style.display = 'block';
         if (!rabbitInterval) {
@@ -189,7 +189,7 @@
             zIndex: 1001 
         });
     }
-} // <-- Обязательная скобка здесь
+}
 
     // Прыгающий заяц
     function moveRabbit() {
