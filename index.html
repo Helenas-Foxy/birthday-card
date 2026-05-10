@@ -177,29 +177,46 @@
     }
     let rabbitInterval = null; 
     function showLog() { 
-        document.getElementById('overlay').style.display = 'block';
-        if (!rabbitInterval) {
-        moveRabbit();
-        }
-        if (typeof confetti === 'function') {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            zIndex: 1001 
+    // 1. Открываем окно
+    document.getElementById('overlay').style.display = 'block';
+    
+    // 2. Запускаем зайца
+    moveRabbit();
+    
+    // 3. Запускаем встроенные конфетти (рисуем прямо на холсте матрицы)
+    createInternalConfetti();
+}
+
+// Встроенная функция создания конфетти (не требует внешних библиотек)
+function createInternalConfetti() {
+    const canvas = document.getElementById('canvas'); // Используем тот же холст, что и для матрицы
+    if (!canvas) return;
+    
+    // Генерируем 100 частиц
+    for(let i = 0; i < 100; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height, // Начинаем от центра или сверху
+            size: Math.random() * 8 + 4,
+            color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+            vel: Math.random() * 6 + 4, // Скорость падения
+            rot: Math.random() * 360
         });
     }
 }
 
-    // Прыгающий заяц
-    function moveRabbit() {
-        const r = document.getElementById('easter-rabbit');
-        setInterval(() => {
-            const x = Math.random() * 40 - 20;
-            const y = Math.random() * 20 - 10;
-            r.style.transform = `translate(${x}px, ${y}px)`;
-        }, 500);
-    }
+let rabbitStarted = false;
+function moveRabbit() {
+    const r = document.getElementById('easter-rabbit');
+    if (!r || rabbitStarted) return; 
+
+    rabbitStarted = true;
+    setInterval(() => {
+        const x = Math.random() * 60 - 30; // Чуть больше амплитуда
+        const y = Math.random() * 40 - 20;
+        r.style.transform = `translate(${x}px, ${y}px)`;
+    }, 500);
+}
 
     // ПАСХАЛКА: Создание объектов
         function spawnEasterEggs() {
