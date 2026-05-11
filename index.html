@@ -194,13 +194,8 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         document.getElementById('terminal').classList.remove('shake');
         document.getElementById('final-msg').style.display = 'block';
     }, 500);
-}
-    
-    setTimeout(() => {
-        document.getElementById('terminal').classList.remove('shake');
-        document.getElementById('final-msg').style.display = 'block';
-    }, 500);
-}
+} // <--- ПРОВЕРЬ: После этой скобки должна сразу идти следующая функция showLog()
+
     function showLog() { 
     // 1. Открываем окно
     console.log("Кнопка нажата, пытаюсь запустить музыку...");
