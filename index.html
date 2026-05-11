@@ -205,7 +205,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
                 // Если файл не найден, в консоли браузера (F12) будет ошибка 404
             });
         }
-
+}
     // 3. Запускаем зайца
     moveRabbit();
     
@@ -262,10 +262,9 @@ function closeWish() {
 }
 
     // ПАСХАЛКА: Создание объектов
-        function spawnEasterEggs() {
+            function spawnEasterEggs() {
         playBeep(600, 0.2);
         
-        // 1. Проверь, чтобы названия свойств были именно img и text
         const data = [
             { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
             { img: "images/fox.png", text: "Нет в мире совершенства!" },
@@ -283,7 +282,7 @@ function closeWish() {
                 const el = document.createElement('div');
                 el.className = 'easter-obj';
                 
-                // 2. ИСПРАВЛЕНИЕ: Используем item.img для картинки и item.text для подписи
+                // Исправлено: добавлена закрывающая обратная кавычка ` после </div>
                 el.innerHTML = `
                     <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
                     <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
@@ -295,7 +294,7 @@ function closeWish() {
                 
                 setTimeout(() => el.remove(), 10000);
             }, index * 1200);
-        }); // Здесь должны быть эти две скобки!
+        }); 
     }
 
     function animate() {
