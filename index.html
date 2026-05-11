@@ -137,21 +137,22 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     window.onresize = resize;
     resize();
 
-    // Матрица на фоне
     const columns = canvas.width / 20;
     for(let x = 0; x < columns; x++) matrixSymbols[x] = 1;
+
     function drawMatrix() {
         ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#003300";
+        ctx.font = "16px monospace";
         for(let i = 0; i < matrixSymbols.length; i++) {
-            ctx.fillText(alphabet.charAt(Math.floor(Math.random()*2)), i*20, matrixSymbols[i]*20);
-            if(matrixSymbols[i]*20 > canvas.height && Math.random() > 0.975) matrixSymbols[i] = 0;
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * 20, matrixSymbols[i] * 20);
+            if(matrixSymbols[i] * 20 > canvas.height && Math.random() > 0.975) matrixSymbols[i] = 0;
             matrixSymbols[i]++;
         }
     }
 
-    // Звук
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(freq, dur) {
         const osc = audioCtx.createOscillator();
@@ -162,126 +163,47 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         osc.start(); osc.stop(audioCtx.currentTime + dur);
     }
 
-    // Логика терминала
-  async function initSystem() {
-    console.log("ЗАПУСК: Попытка включить музыку...");
-    const music = document.getElementById('changelogMusic');
-    
-    if (music) {
-        music.volume = 0.5;
-        music.play()
-            .then(() => console.log("РЕЗУЛЬТАТ: Музыка играет!"))
-            .catch(e => {
-                console.log("РЕЗУЛЬТАТ: Блокировка браузера. Нужен еще клик.");
+    async function initSystem() {
+        const music = document.getElementById('changelogMusic');
+        if (music) {
+            music.volume = 0.5;
+            music.play().catch(e => {
+                console.log("Audio blocked");
                 document.body.addEventListener('click', () => music.play(), { once: true });
             });
-    }
-
-    document.getElementById('goBtn').style.display = 'none';
-    
-    const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
-    for (let l of logs) {
-        playBeep(400, 0.05);
-        let d = document.createElement('div'); 
-        d.className = 'line'; 
-        d.textContent = l;
-        document.getElementById('out').appendChild(d);
-        await new Promise(r => setTimeout(r, 600));
-    }
-    
-       // ... здесь заканчивается цикл логов ...
-    document.getElementById('terminal').classList.add('shake');
-    setTimeout(() => {
-        document.getElementById('terminal').classList.remove('shake');
-        document.getElementById('final-msg').style.display = 'block';
-    }, 500);
-} // <--- ВОТ ЭТА ОДНА СКОБКА (строка ~203)
-
-function showLog() { // Сразу после нее идет следующая функция
-    document.getElementById('overlay').style.display = 'block';
-}
-
-    // 2. Переключаем музыку
-    const oldMusic = document.getElementById('bgMusic'); // Первая музыка
-    const newMusic = document.getElementById('changelogMusic'); // Музыка чейнджлога
-    
-    if (oldMusic) oldMusic.pause();
-
-    if (newMusic) {
-        // Устанавливаем громкость
-        newMusic.volume = 0.5;
-        
-        // Маленькая хитрость: браузеры любят, когда музыку запускают через промис
-        const playPromise = newMusic.play();
-
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                console.log("Музыка успешно запущена!");
-            }).catch(error => {
-                console.error("Автозапуск заблокирован или файл не найден:", error);
-                // Если файл не найден, в консоли браузера (F12) будет ошибка 404
-            });
         }
-}
-    // 3. Запускаем зайца
-    moveRabbit();
-    
-    // 4. Запускаем конфетти (внешние и встроенные для надежности)
-    if (typeof confetti === 'function') {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            zIndex: 1001 
-        });
+
+        document.getElementById('goBtn').style.display = 'none';
+        const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
+        for (let l of logs) {
+            playBeep(400, 0.05);
+            let d = document.createElement('div'); d.className = 'line'; d.textContent = l;
+            document.getElementById('out').appendChild(d);
+            await new Promise(r => setTimeout(r, 600));
+        }
+        document.getElementById('terminal').classList.add('shake');
+        setTimeout(() => {
+            document.getElementById('terminal').classList.remove('shake');
+            document.getElementById('final-msg').style.display = 'block';
+            // Конфетти при успехе
+            for(let i=0; i<50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 5 + 5,
+                    color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                    vel: Math.random() * 3 + 2,
+                    rot: 0
+                });
+            }
+        }, 500);
     }
-    
-    createInternalConfetti(); 
-} // Конец функции showLog (лишние скобки удалены)
 
-// Встроенная функция создания конфетти
-function createInternalConfetti() {
-    const canvas = document.getElementById('canvas'); 
-    if (!canvas) return;
-    
-    for(let i = 0; i < 100; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: -20, // Начинаем чуть выше экрана
-            size: Math.random() * 8 + 4,
-            color: `hsl(${Math.random() * 360}, 80%, 60%)`,
-            vel: Math.random() * 5 + 2, // Скорость падения
-            rot: Math.random() * 360
-        });
-    }
-}
+    function showLog() { document.getElementById('overlay').style.display = 'block'; }
+    function closeLog() { document.getElementById('overlay').style.display = 'none'; }
 
-let rabbitStarted = false;
-function moveRabbit() {
-    const r = document.getElementById('easter-rabbit');
-    if (!r || rabbitStarted) return; 
-
-    rabbitStarted = true;
-    setInterval(() => {
-        const x = Math.random() * 60 - 30;
-        const y = Math.random() * 40 - 20;
-        r.style.transform = `translate(${x}px, ${y}px)`;
-    }, 500);
-}
-
-function closeWish() {
-    document.getElementById('overlay').style.display = 'none';
-    
-    const newMusic = document.getElementById('changelogMusic');
-    if (newMusic) {
-        newMusic.pause(); // Останавливаем музыку при выходе
-    }
-}
-
-    // ПАСХАЛКА: Создание объектов
-            function spawnEasterEggs() {
+    function spawnEasterEggs() {
         playBeep(600, 0.2);
-        
         const data = [
             { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
             { img: "images/fox.png", text: "Нет в мире совершенства!" },
@@ -290,7 +212,7 @@ function closeWish() {
             { img: "images/rabbit.png", text: "Зай, я фсё..." },
             { img: "images/button.png", text: "Нажимаааю!..." },
             { img: "images/anchor.png", text: "Якорёчки-якоря" },
-            { img: "images/westham.jpg", text: "West Ham United forever in my heart" },
+            { img: "images/westham.jpg", text: "West Ham United forever" },
             { img: "images/kuniman.png", text: "Присаживайся удобнее..." }
         ];
 
@@ -298,47 +220,36 @@ function closeWish() {
             setTimeout(() => {
                 const el = document.createElement('div');
                 el.className = 'easter-obj';
-                
-                // Исправлено: добавлена закрывающая обратная кавычка ` после </div>
                 el.innerHTML = `
                     <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
                     <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
                 `;
-                
-                el.style.left = Math.random() * 60 + 20 + "%";
-                el.style.top = Math.random() * 60 + 20 + "%";
+                el.style.left = (Math.random() * 60 + 20) + "%";
+                el.style.top = (Math.random() * 60 + 20) + "%";
                 document.body.appendChild(el);
-                
                 setTimeout(() => el.remove(), 10000);
             }, index * 1200);
-        }); 
+        });
     }
 
     function animate() {
-    drawMatrix(); // Рисуем фон матрицы
-    
-    // ДОБАВЛЕНО: Рисуем и двигаем конфетти
-    if (particles.length > 0) {
-        particles.forEach((p, index) => {
-            p.y += p.vel; // Двигаем вниз
-            p.rot += 5;   // Вращаем
-            
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.rot * Math.PI / 180);
-            ctx.fillStyle = p.color;
-            ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-            ctx.restore();
-
-            // Удаляем частицу, если она улетела за экран
-            if (p.y > canvas.height) {
-                particles.splice(index, 1);
-            }
-        });
-    }
+        drawMatrix();
+        if (particles.length > 0) {
+            particles.forEach((p, index) => {
+                p.y += p.vel;
+                p.rot += 5;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+                if (p.y > canvas.height) particles.splice(index, 1);
+            });
+        }
         requestAnimationFrame(animate);
     }
-animate();
+    animate();
 </script>
 </body>
 </html>
