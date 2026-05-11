@@ -164,15 +164,6 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
 
     async function initSystem() {
-        const music = document.getElementById('changelogMusic');
-        if (music) {
-            music.volume = 0.5;
-            music.play().catch(e => {
-                console.log("Audio blocked");
-                document.body.addEventListener('click', () => music.play(), { once: true });
-            });
-        }
-
         document.getElementById('goBtn').style.display = 'none';
         const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
         for (let l of logs) {
@@ -199,9 +190,24 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         }, 500);
     }
 
-    function showLog() { document.getElementById('overlay').style.display = 'block'; }
-    function closeLog() { document.getElementById('overlay').style.display = 'none'; }
-
+    function showLog() {
+    // ЗАПУСК МУЗЫКИ ТУТ
+    const music = document.getElementById('changelogMusic');
+    if (music) {
+        music.volume = 0.5;
+        music.play().catch(e => console.log("Ошибка звука:", e));
+    }
+    
+    document.getElementById('overlay').style.display = 'block';
+}
+    function closeLog() {
+    const music = document.getElementById('changelogMusic');
+    if (music) {
+        music.pause();
+        music.currentTime = 0; // Сброс трека в начало
+    }
+    document.getElementById('overlay').style.display = 'none';
+}
     function spawnEasterEggs() {
         playBeep(600, 0.2);
         const data = [
