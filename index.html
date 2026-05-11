@@ -130,6 +130,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
+    let easterActive = false;
     let matrixSymbols = [];
     const alphabet = "01";
 
@@ -201,44 +202,50 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     document.getElementById('overlay').style.display = 'block';
 }
     function closeLog() {
+    easterActive = false; // Останавливаем создание новых объектов
+    
     const music = document.getElementById('changelogMusic');
     if (music) {
         music.pause();
-        music.currentTime = 0; // Сброс трека в начало
+        music.currentTime = 0; 
     }
+        // Удаляем все, что уже успело вылететь
     document.querySelectorAll('.easter-obj').forEach(el => el.remove());
-    document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
 }
     function spawnEasterEggs() {
-        playBeep(600, 0.2);
-        const data = [
-            { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
-            { img: "images/fox.png", text: "Нет в мире совершенства!" },
-            { img: "images/spider.png", text: "Паучара..." },
-            { img: "images/tiger.png", text: "Я могу и зарычать..." },
-            { img: "images/rabbit.png", text: "Зай, я фсё..." },
-            { img: "images/button.png", text: "Нажимаааю!..." },
-            { img: "images/anchor.png", text: "Якорёчки-якоря" },
-            { img: "images/westham.jpg", text: "West Ham United forever" },
-            { img: "images/kuniman.png", text: "Присаживайся удобнее..." }
-        ];
+    easterActive = true; // Активируем режим пасхалок
+    playBeep(600, 0.2);
+    const data = [
+        { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
+        { img: "images/fox.png", text: "Нет в мире совершенства!" },
+        { img: "images/spider.png", text: "Паучара..." },
+        { img: "images/tiger.png", text: "Я могу и зарычать..." },
+        { img: "images/rabbit.png", text: "Зай, я фсё..." },
+        { img: "images/button.png", text: "Нажимаааю!..." },
+        { img: "images/anchor.png", text: "Якорёчки-якоря" },
+        { img: "images/westham.jpg", text: "West Ham United forever" },
+        { img: "images/kuniman.png", text: "Присаживайся удобнее..." }
+    ];
 
-        data.forEach((item, index) => {
-            setTimeout(() => {
-                const el = document.createElement('div');
-                el.className = 'easter-obj';
-                el.innerHTML = `
-                    <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
-                    <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
-                `;
-                el.style.left = (Math.random() * 60 + 20) + "%";
-                el.style.top = (Math.random() * 60 + 20) + "%";
-                document.body.appendChild(el);
-                setTimeout(() => el.remove(), 10000);
-            }, index * 1200);
-        });
-    }
+    data.forEach((item, index) => {
+        setTimeout(() => {
+            // ПРОВЕРКА: если мы уже вышли из окна, новые картинки не создаем
+            if (!easterActive) return; 
 
+            const el = document.createElement('div');
+            el.className = 'easter-obj';
+            el.innerHTML = `
+                <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
+                <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
+            `;
+            el.style.left = (Math.random() * 60 + 20) + "%";
+            el.style.top = (Math.random() * 60 + 20) + "%";
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 10000);
+        }, index * 1200);
+    });
+}
     function animate() {
         drawMatrix();
         if (particles.length > 0) {
