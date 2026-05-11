@@ -206,6 +206,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         music.pause();
         music.currentTime = 0; // Сброс трека в начало
     }
+    document.querySelectorAll('.easter-obj').forEach(el => el.remove());
     document.getElementById('overlay').style.display = 'none';
 }
     function spawnEasterEggs() {
