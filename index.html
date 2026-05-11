@@ -6,7 +6,7 @@
     <title>Jacob 4.4 — Ultimate Edition</title>
     <style>
         body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         #terminal { width: 90%; max-width: 500px; background: rgba(10, 10, 10, 0.9); padding: 25px; border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0,255,65,0.4); position: relative; z-index: 10; transition: transform 0.1s; }
        .tag-white { 
        font-weight: bold; 
@@ -122,7 +122,10 @@
         </div>
     </div>
 </div>
-
+<audio id="changelogMusic" preload="auto">
+        <source src="images/clover.mp3" type="audio/mpeg">
+        <source src="https://soundhelix.com" type="audio/mpeg">
+    </audio>
 <script>
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
@@ -319,10 +322,6 @@ function closeWish() {
     }
         requestAnimationFrame(animate);
 }
-<audio id="changelogMusic" preload="auto">
-        <source src="images/твой_файл.mp3" type="audio/mpeg">
-        <source src="https://soundhelix.com" type="audio/mpeg">
-    </audio>
 </script>
 </body>
 </html>
