@@ -163,27 +163,23 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
 
     // Логика терминала
-   async function initSystem() {
-    console.log("Кнопка нажата, пытаюсь запустить музыку...");
+  async function initSystem() {
+    console.log("ЗАПУСК: Попытка включить музыку...");
     const music = document.getElementById('changelogMusic');
     
     if (music) {
         music.volume = 0.5;
-        setTimeout(() => {
-            music.play()
-                .then(() => console.log("Музыка успешно запущена!"))
-                .catch(e => {
-                    console.error("Ошибка воспроизведения:", e);
-                    document.body.addEventListener('click', () => music.play(), { once: true });
-                });
-        }, 100); // <-- Здесь закрывается setTimeout
+        music.play()
+            .then(() => console.log("РЕЗУЛЬТАТ: Музыка играет!"))
+            .catch(e => {
+                console.log("РЕЗУЛЬТАТ: Блокировка браузера. Нужен еще клик.");
+                document.body.addEventListener('click', () => music.play(), { once: true });
+            });
     }
 
-    // Теперь остальной код идет ПРАВИЛЬНО, вне setTimeout
     document.getElementById('goBtn').style.display = 'none';
     
     const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
-    
     for (let l of logs) {
         playBeep(400, 0.05);
         let d = document.createElement('div'); 
@@ -194,6 +190,11 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
     
     document.getElementById('terminal').classList.add('shake');
+    setTimeout(() => {
+        document.getElementById('terminal').classList.remove('shake');
+        document.getElementById('final-msg').style.display = 'block';
+    }, 500);
+}
     
     setTimeout(() => {
         document.getElementById('terminal').classList.remove('shake');
