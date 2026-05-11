@@ -237,7 +237,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
             const el = document.createElement('div');
             el.className = 'easter-obj';
             el.innerHTML = `
-                <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
+                <img src="../${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
                 <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
             `;
             el.style.left = (Math.random() * 60 + 20) + "%";
