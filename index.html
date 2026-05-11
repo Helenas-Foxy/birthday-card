@@ -200,6 +200,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
     
     document.getElementById('overlay').style.display = 'block';
+        moveRabbit();
 }
     function closeLog() {
     easterActive = false; // Останавливаем создание новых объектов
@@ -264,6 +265,23 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         requestAnimationFrame(animate);
     }
     animate();
+    function moveRabbit() {
+    const r = document.getElementById('easter-rabbit');
+    if (!r) return; // Если зайца нет, ничего не делаем
+
+    // Создаем интервал прыжков (каждые 500мс)
+    const rabbitInterval = setInterval(() => {
+        // Если окно закрыто, останавливаем интервал, чтобы не тратить ресурсы
+        if (document.getElementById('overlay').style.display === 'none') {
+            clearInterval(rabbitInterval);
+            return;
+        }
+
+        const x = Math.random() * 40 - 20; // Прыжок по горизонтали
+        const y = Math.random() * 20 - 10; // Прыжок по вертикали
+        r.style.transform = `translate(${x}px, ${y}px)`;
+    }, 500);
+}
 </script>
 </body>
 </html>
