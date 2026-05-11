@@ -164,6 +164,11 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
     // Логика терминала
     async function initSystem() {
+        const music = document.getElementById('changelogMusic');
+    if (music) {
+        music.volume = 0.3; // Уровень громкости (от 0 до 1)
+        music.play().catch(e => console.log("Браузер заблокировал автозапуск:", e));
+    }
         document.getElementById('goBtn').style.display = 'none';
         const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
         for (let l of logs) {
