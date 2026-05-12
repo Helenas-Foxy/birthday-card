@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jacob 4.4 — Ultimate Edition</title>
+    <title>Di.nik 3.5 — Ultimate Edition</title>
     <style>
         body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
 canvas { position: absolute; top: 0; left: 0; z-index: 1; }
@@ -67,13 +67,13 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
 <div id="terminal">
     <div id="out">
-        <div style="color:#888; margin-bottom: 10px;">// Jacob OS [v.4.4]</div>
+        <div style="color:#888; margin-bottom: 10px;">// Di.nik OS [v.3.5]</div>
         <div>> Status: Awaiting deployment...</div>
     </div>
     <button class="btn" id="goBtn" onclick="initSystem()">START_UPGRADE.SH</button>
     <div id="final-msg">
         <div style="font-size: 1.5em; margin-bottom: 10px;">🎉 DEPLOYED! 🎉</div>
-        HAPPY BIRTHDAY, JACOB!<br> Пусть жизнь компилится без багов!
+        HAPPY BIRTHDAY, DIANA!<br> Пусть жизнь компилится без багов!
         <button class="btn" id="moreBtn" style="background:transparent; color:#00ff41; border:1px solid #00ff41;" onclick="showLog()">VIEW_CHANGELOG</button>
     </div>
 </div>
@@ -81,19 +81,19 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 <div id="overlay">
     <span class="close-btn" onclick="closeLog()">[ BACK_TO_CONSOLE ]</span>
     <div id="log-content" style="max-width: 600px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #050505;">
-        <h1 style="color: #fff;">Changelog: v4.4 — Jacob</h1>
-        <p><i>Быстрее! Стабильнее! Твой Jacob в лучшей форме!</i></p>
+        <h1 style="color: #fff;">Changelog: v3.5 — Di.nik</h1>
+        <p><i>Быстрее! Стабильнее! Твоя Di.nik в лучшей форме!</i></p>
         <hr border="1" color="#00ff41">
 
         <h2>🚀 Added (Новое в этой версии):</h2>
         <span class="tag-white">Module "Unstoppable Wealth":</span>
         <span class="desc"> 💰 Внедрен алгоритм автоматического пополнения банковского счета.</span>
         <span class="tag-white">Feature "Ideal Body":</span>
-        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тортиками.</span>
+        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, роллами, чебуреками и тортиками.</span>
         <span class="tag-white">System "Smart Zen":</span>
         <span class="desc"> 🧘‍♂️ Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
         <span class="tag-white">New Location:</span>
-        <span class="desc"> 🗺️ Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
+        <span class="desc"> 🗺️ Построены новые маршруты для путешествий (доступны в режиме Real Life).</span>
                       
         <h2>🛠 Changed (Изменения и улучшения):</h2>
         <span class="tag-white">Engine Update:</span>
@@ -101,15 +101,15 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         <span class="tag-white">Engine Update:</span>
         <span class="desc"> ⚡ Личный КПД увеличен на 100%.</span>
         <span class="tag-white">UI/UX:</span>
-        <span class="desc"> 😎 Скин «Уверенность» активирован по умолчанию.</span>
+        <span class="desc"> 😎 Скин «Уверенность», "Прекрасность", "Ахуенность" активирован по умолчанию.</span>
         <span class="tag-white">Algorithm "Priority":</span>
-        <span class="desc"> 👌 Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
+        <span class="desc"> 👌 Теперь система автоматически отсеивает чужое мнение и фокусируется на только личных желаниях.</span>
 
         <h2>🩹 Fixed:</h2>
         <span class="tag-white">Bug "Procrastination":</span>
         <span class="desc"> 🤏 Фикс критической ошибки лени.</span>
         <span class="tag-white">Issue "Stress"</span>
-        <span class="desc">:🎯 Удалена критическая уязвимость, позволявшая мелким багам портить настроение.Патч против плохого настроения.</span>
+        <span class="desc">:🎯 Удалена критическая уязвимость, позволявшая мелким багам портить настроение. Патч против плохого настроения.</span>
 
         <h2>🗑 Removed:</h2>
         <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
@@ -123,7 +123,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     </div>
 </div>
 <audio id="changelogMusic" preload="auto" loop>
-    <source src="images/it.mp3" type="audio/mpeg">
+    <source src="images/jig.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -166,7 +166,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
     async function initSystem() {
         document.getElementById('goBtn').style.display = 'none';
-        const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
+        const logs = ["> Cleaning...", "> Patching...", "> Upgrading Di.nik...", "> DONE."];
         for (let l of logs) {
             playBeep(400, 0.05);
             let d = document.createElement('div'); d.className = 'line'; d.textContent = l;
@@ -218,15 +218,14 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     easterActive = true; // Активируем режим пасхалок
     playBeep(600, 0.2);
     const data = [
-        { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
-        { img: "images/fox.png", text: "Нет в мире совершенства!" },
-        { img: "images/spider.png", text: "Паучара..." },
-        { img: "images/tiger.png", text: "Я могу и зарычать..." },
-        { img: "images/rabbit.png", text: "Зай, я фсё..." },
-        { img: "images/button.png", text: "Нажимаааю!..." },
-        { img: "images/anchor.png", text: "Якорёчки-якоря" },
-        { img: "images/westham.jpg", text: "West Ham United forever" },
-        { img: "images/kuniman.png", text: "Присаживайся удобнее..." }
+        { img: "images/belka.jpg", text: "Люблю похрустеть)" },
+        { img: "images/cat.jpg", text: "Могу и нашкодить" },
+        { img: "images/clock.jpg", text: "Стрелочки - идите назад!" },
+        { img: "images/man.jpg", text: "Мужчинам я не по усам!)" },
+        { img: "images/luh.jpg", text: "Это мой уровень)))" },
+        { img: "images/heart.jpg", text: "Люблю вас!" },
+        { img: "images/leo.jpg", text: "Когда в Эйнштейн???" }
+       
     ];
 
     data.forEach((item, index) => {
@@ -265,6 +264,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         requestAnimationFrame(animate);
     }
     animate();
+
     function moveRabbit() {
     const r = document.getElementById('easter-rabbit');
     if (!r) return; // Если зайца нет, ничего не делаем
