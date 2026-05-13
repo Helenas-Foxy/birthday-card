@@ -110,7 +110,10 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 </div>
 
 <div id="overlay">
-    <span class="close-btn" onclick="closeLog()">[ BACK_TO_CONSOLE ]</span>
+    <!-- Вызываем поочередно closeLog() для закрытия окна и stopEasterEgg() для отключения музыки -->
+    <span class="close-btn" onclick="closeLog(); stopEasterEgg()">[ BACK_TO_CONSOLE ]</span>
+</div>
+
     <div id="log-content" style="max-width: 600px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #050505;">
         <h1 style="color: #fff;">Changelog: v4.4 — Jacob</h1>
         <p><i>Быстрее! Стабильнее! Твой Jacob в лучшей форме!</i></p>
@@ -161,12 +164,12 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
     <!-- Фоновая музыка второй страницы -->
 <audio id="changelogMusic" preload="auto" loop> 
-  <source src="images/it.mp3" type="audio/mpeg"> 
+  <source src="images/cl.mp3" type="audio/mpeg"> 
 </audio>
 
 <!-- 🌟 Новый аудиотрек для пасхалки (Заяц) -->
 <audio id="easterMusic" preload="auto" loop> 
-  <source src="images/easter.mp3" type="audio/mpeg"> 
+  <source src="images/it.mp3" type="audio/mpeg"> 
 </audio>
 
 
