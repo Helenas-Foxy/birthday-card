@@ -356,18 +356,18 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
   const r = document.getElementById('easter-rabbit');
   if (!r) return;
 
-       const rabbitInterval = setInterval(() => {
+       const rabbitInterval = setInterval(()=> {
            // Если окно закрыто, останавливаем интервал, чтобы не тратить ресурсы
            if (document.getElementById('overlay').style.display === 'none') {
                clearInterval(rabbitInterval);
-              return;
+              return);
             }
-        }
         const x = Math.random() * 40 - 20; // Прыжок по горизонтали
         const y = Math.random() * 20 - 10; // Прыжок по вертикали    
         // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
         r.style.position = 'fixed';
         r.style.zIndex = '10000';
+        }
         
         // Вычисляем случайные координаты внутри экрана
         const randomX = Math.random() * (window.innerWidth - 60);
