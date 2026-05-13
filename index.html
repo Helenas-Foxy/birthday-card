@@ -323,15 +323,15 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
         r.style.position = 'fixed';
         r.style.zIndex = '10000';
-        }
+        
         // Вычисляем случайные координаты внутри экрана
         const randomX = Math.random() * (window.innerWidth - 60);
         const randomY = Math.random() * (window.innerHeight - 60);
   
         r.style.left = `${randomX}px`;
         r.style.top = `${randomY}px`;
+    }
 }
-
 // Функция, вызываемая при клике из HTML (onclick="spawnEasterEggs()")
 function spawnEasterEggs() { 
   easterActive = true; 
