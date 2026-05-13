@@ -193,7 +193,8 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
 
     function showLog() {
-    // ЗАПУСК МУЗЫКИ ТУТ
+    
+    // Запуск музыки
     const music = document.getElementById('changelogMusic');
     if (music) {
         music.volume = 0.5;
@@ -203,23 +204,29 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     document.getElementById('overlay').style.display = 'block';
         moveRabbit();
 }
+    // Останавливаем создание новых объектов
     function closeLog() {
-    easterActive = false; // Останавливаем создание новых объектов
+    easterActive = false; 
     
     const music = document.getElementById('changelogMusic');
     if (music) {
         music.pause();
         music.currentTime = 0; 
     }
-        // Удаляем все, что уже успело вылететь
+    
+    // Удаляем все, что уже успело вылететь
     document.querySelectorAll('.easter-obj').forEach(el => el.remove());
-        document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
 }
+    
+    // Функция, которая срабатывает при нажатии на ЗАЙЦА
     function spawnEasterEggs() {
     easterActive = true; // Активируем режим пасхалок
-    playBeep(600, 0.2);
-   
-    const data = [
+    if (typeof playBeep === 'function') playBeep(600, 0.2);
+   startEasterEgg(easterData); 
+}
+    
+    const easterData = [
         { img: "images/gnom.jpg", text: "Гномы такие вредные!" },
         { img: "images/fox.png", text: "Нет в мире совершенства!.." },
         { img: "images/spider.png", text: "Паучара..." },
@@ -231,28 +238,35 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         { img: "images/kuniman.jpg", text: "Kuniman: Присаживайся удобнее..." },
         { img: "images/suchi.jpg", text: "Нехуй тут вёсла сушить!" },
     ];
-}
-// 1. Создаем массив для отслеживания таймеров (вне функции)
-   const easterTimers = []; 
 
-// 2. Сам исправленный блок генерации элементов
-  function startEasterEgg(data) { 
-      easterActive = true;
-      data.forEach((item, index) => {
+    // Массив для отслеживания активных таймеров (вне функции)
+   const easterTimers = [];
+   if (typeof easterActive === 'undefined') { var easterActive = false; } 
+
+  // Блок генерации элементов на экране
+  function startEasterEgg(data) {
+  if (!data || !Array.isArray(data)) return;
+
+  data.forEach((item, index) => {
     const spawnTimer = setTimeout(() => {
       if (!easterActive) return;
+
       const el = document.createElement('div');
-      el.className = 'easter-obj';  // Гарантируем позиционирование через JS
+      el.className = 'easter-obj';
+      
       el.style.position = 'fixed';
       el.style.zIndex = '9999';
       el.style.left = `${Math.random() * 60 + 20}%`;
       el.style.top = `${Math.random() * 60 + 20}%`;
       el.style.transform = 'translate(-50%, -50%)';
+
       el.innerHTML = `
         <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
-        <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
+        <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center; font-family:sans-serif;">${item.text}</div>
       `;
+
       document.body.appendChild(el);
+
       const removeTimer = setTimeout(() => el.remove(), 10000);
       easterTimers.push(removeTimer);
     }, index * 1200);
@@ -260,12 +274,12 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     easterTimers.push(spawnTimer);
   });
 }
-    function stopEasterEgg() {
+  
+  // Функция для закрытия (вызывать при выходе из окна)
+  function stopEasterEgg() {
   easterActive = false;
-  // Отменяем все будущие появления картинок
   easterTimers.forEach(timer => clearTimeout(timer));
-  easterTimers.length = 0; 
-  // Удаляем те картинки, которые сейчас висят на экране
+  easterTimers.length = 0;
   document.querySelectorAll('.easter-obj').forEach(el => el.remove());
 }
      function animate() {
@@ -286,21 +300,37 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         requestAnimationFrame(animate);
     }
     animate();
-    function moveRabbit() {
-    const r = document.getElementById('easter-rabbit');
-    if (!r) return; // Если зайца нет, ничего не делаем
+   
+  function moveRabbit() {
+  const r = document.getElementById('easter-rabbit');
+  if (!r) return;
 
-    // Создаем интервал прыжков (каждые 500мс)
-    const rabbitInterval = setInterval(() => {
-        // Если окно закрыто, останавливаем интервал, чтобы не тратить ресурсы
-        if (document.getElementById('overlay').style.display === 'none') {
-            clearInterval(rabbitInterval);
-            return;
-        }
-    const x = Math.random() * 40 - 20; // Прыжок по горизонтали
-    const y = Math.random() * 20 - 10; // Прыжок по вертикали
-    r.style.transform = `translate(${x}px, ${y}px)`;
-    }, 500);
+  // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
+  r.style.position = 'fixed';
+  r.style.cursor = 'pointer';
+  r.style.zIndex = '10000';
+  r.style.fontSize = '40px'; // Увеличиваем размер эмодзи, чтобы по нему было легче попасть
+  r.style.userSelect = 'none'; // Запрещаем выделение текста при частых кликах
+  r.style.transition = 'left 0.3s ease, top 0.3s ease'; // Плавное перемещение
+
+  // Вычисляем случайные координаты внутри экрана
+  const randomX = Math.random() * (window.innerWidth - 60);
+  const randomY = Math.random() * (window.innerHeight - 60);
+  
+  r.style.left = `${randomX}px`;
+  r.style.top = `${randomY}px`;
+}
+
+// Функция, вызываемая при клике из HTML (onclick="spawnEasterEggs()")
+function spawnEasterEggs() { 
+  easterActive = true; 
+  if (typeof playBeep === 'function') playBeep(600, 0.2);
+  
+  // Запускаем исправленную генерацию картинок
+  startEasterEgg(easterData); 
+  
+  // Опционально: заставляем зайца прыгнуть в новое место при клике
+  moveRabbit(); 
 }
   
 </script>
