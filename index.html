@@ -241,8 +241,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
     // Массив для отслеживания активных таймеров (вне функции)
    const easterTimers = [];
-   if (typeof easterActive === 'undefined') { var easterActive = false; } 
-
+  
   // Блок генерации элементов на экране
   function startEasterEgg(data) {
   if (!data || !Array.isArray(data)) return;
