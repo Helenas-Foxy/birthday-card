@@ -352,32 +352,46 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
     animate();
    
-  function moveRabbit() {
+ // Переменную интервала обязательно объявляем снаружи функции
+let rabbitInterval = null; 
+
+function moveRabbit() {
   const r = document.getElementById('easter-rabbit');
   if (!r) return;
 
-       const rabbitInterval = setInterval(()=> {
-           // Если окно закрыто, останавливаем интервал, чтобы не тратить ресурсы
-           if (document.getElementById('overlay').style.display === 'none') {
-               clearInterval(rabbitInterval);
-              return);
-            }
-        const x = Math.random() * 40 - 20; // Прыжок по горизонтали
-        const y = Math.random() * 20 - 10; // Прыжок по вертикали    
-        // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
-        r.style.position = 'fixed';
-        r.style.zIndex = '10000';
-        }
-        
-        // Вычисляем случайные координаты внутри экрана
-        const randomX = Math.random() * (window.innerWidth - 60);
-        const randomY = Math.random() * (window.innerHeight - 60);
-  
-        r.style.left = `${randomX}px`;
-        r.style.top = `${randomY}px`;
+  // Если таймер уже запущен, не создаем дубликат
+  if (rabbitInterval) return;
+
+  // Базовые стили для центрирования в потоке текста
+  r.style.position = 'relative';
+  r.style.display = 'inline-block';
+  r.style.transition = 'transform 0.1s ease-in-out';
+
+  rabbitInterval = setInterval(() => {
+    const overlay = document.getElementById('overlay');
+    
+    // Если окно закрыто, останавливаем интервал
+    if (overlay && overlay.style.display === 'none') {
+      clearInterval(rabbitInterval);
+      rabbitInterval = null;
+      r.style.transform = 'translate(0, 0)'; // Возвращаем в центр
+      return;
     }
+
+    // Использование ваших переменных x и y для имитации прыжков на месте
+    const x = Math.random() * 20 - 10; // Небольшое смещение влево-вправо
+    const y = -(Math.random() * 15 + 5); // Прыжок строго вверх
+
+    r.style.transform = `translate(${x}px, ${y}px)`;
+
+    // Возвращаем зайца в исходную точку перед следующим прыжком
+    setTimeout(() => {
+      r.style.transform = 'translate(0, 0)';
+    }, 100);
+
+  }, 400); // Повторять прыжок каждые 400 миллисекунд
 }
-// Функция, вызываемая при клике из HTML (onclick="spawnEasterEggs()")
+
 function spawnEasterEggs() { 
   easterActive = true; 
   if (typeof playBeep === 'function') playBeep(600, 0.2);
