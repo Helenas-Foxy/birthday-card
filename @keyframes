@@ -31,34 +31,65 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; }
         
         /* Кнопка-заяц */
-        #easter-rabbit { 
-            position: relative; font-size: 40px; cursor: pointer; display: inline-block; 
-            transition: all 0.5s ease-in-out; margin-top: 30px; user-select: none;
+        #easter-rabbit {
+          position: relative;
+          font-size: 40px;
+          cursor: pointer;
+          display: inline-block;
+          margin-top: 30px;
+          user-select: none;
+          /* Плавный переход для базовых свойств */
+          transition: all 0.5s ease-in-out; 
+          /* Бесконечные легкие прыжки на месте (0.6 секунды на один цикл) */
+          animation: bunnyHop 0.6s infinite ease-in-out; 
+        }
+
+        /* Анимация микро-прыжков на месте */
+        @keyframes bunnyHop {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); } /* Высота прыжка */
         }
 
         /* Вылетающие объекты */
-        .easter-obj { 
-            position: fixed; 
-            z-index: 200; 
-            pointer-events: none; 
-            background: rgba(0,0,0,0.85);
-            border: 2px solid #00ff41; 
-            padding: 15px; 
-            border-radius: 12px; 
-            text-align: center;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(0,255,101,0.3);
-            /* Анимация появления и долгого плавания */
-            animation: floatAround 10s ease-in-out forwards; 
+    .easter-obj {
+          position: fixed;
+          z-index: 200;
+          pointer-events: none;
+          background: rgba(0,0,0,0.85);
+          border: 2px solid #00ff41;
+          padding: 12px;           /* Чуть уменьшили отступ для компактности */
+          border-radius: 12px;
+          text-align: center;
+          color: #fff;
+          box-shadow: 0 0 15px rgba(0,255,101,0.3);
+          max-width: 150px;        /* Жестко ограничиваем ширину карточки */
+          box-sizing: border-box;  /* Чтобы padding не увеличивал ширину сверх max-width */
+  
+          /* Ваша анимация */
+          animation: floatAround 10s ease-in-out forwards;
         }
 
-        @keyframes floatAround {
-            0% { transform: scale(0) rotate(0deg); opacity: 0; }
-            10% { transform: scale(1) rotate(5deg); opacity: 1; }
-            50% { transform: scale(1.1) translate(20px, -30px) rotate(-5deg); }
-            90% { opacity: 1; }
-            100% { transform: scale(0.8) translate(-20px, -60px) rotate(10deg); opacity: 0; }
-        }
+        /* 📱 Специальные правила для мобильных экранов (шириной до 480px) */
+    @media (max-width: 480px) {
+      .easter-obj {
+        padding: 8px;
+        max-width: 130px; /* Делаем карточку чуть компактнее на смартфонах */
+      }
+      .easter-obj img {
+        width: 100px !important; /* Уменьшаем картинку со 120px до 100px на телефонах */
+      }
+      .easter-obj div {
+        font-size: 12px !important; /* Уменьшаем шрифт текста под картинкой */
+      }
+    }
+
+    @keyframes floatAround {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      10% { transform: scale(1) rotate(5deg); opacity: 1; }
+      50% { transform: scale(1.1) translate(20px, -30px) rotate(-5deg); }
+      90% { opacity: 1; }
+      100% { transform: scale(0.8) translate(-20px, -60px) rotate(10deg); opacity: 0; }
+    }
     </style>
 </head>
 <body>
@@ -254,22 +285,35 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
   function startEasterEgg(data) {
   if (!data || !Array.isArray(data)) return;
 
+  easterActive = true;
+
   data.forEach((item, index) => {
     const spawnTimer = setTimeout(() => {
       if (!easterActive) return;
 
       const el = document.createElement('div');
       el.className = 'easter-obj';
+
+      // 📱 Адаптивный расчет безопасной зоны появления:
+      const cardWidth = 160;  // Примерная максимальная ширина карточки с отступами
+      const cardHeight = 200; // Примерная максимальная высота карточки с текстом
       
-      el.style.position = 'fixed';
-      el.style.zIndex = '9999';
-      el.style.left = `${Math.random() * 60 + 20}%`;
-      el.style.top = `${Math.random() * 60 + 20}%`;
-      el.style.transform = 'translate(-50%, -50%)';
+      // Вычисляем доступную ширину и высоту экрана за вычетом размеров карточки
+      const maxX = window.innerWidth - cardWidth;
+      const maxY = window.innerHeight - cardHeight;
+
+      // Генерируем случайную точку, гарантированно отступая от краев экрана
+      // Минимальный отступ от левого/верхнего края — 20 пикселей
+      const randomX = Math.random() * (maxX - 20) + 20;
+      const randomY = Math.random() * (maxY - 20) + 20;
+
+      // Устанавливаем координаты в пикселях
+      el.style.left = `${randomX}px`;
+      el.style.top = `${randomY}px`;
 
       el.innerHTML = `
         <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
-        <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center; font-family:sans-serif;">${item.text}</div>
+        <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
       `;
 
       document.body.appendChild(el);
@@ -317,6 +361,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
            if (document.getElementById('overlay').style.display === 'none') {
                clearInterval(rabbitInterval);
               return;
+            }
         }
         const x = Math.random() * 40 - 20; // Прыжок по горизонтали
         const y = Math.random() * 20 - 10; // Прыжок по вертикали    
