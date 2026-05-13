@@ -155,6 +155,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     }
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+   
     function playBeep(freq, dur) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -173,6 +174,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
             document.getElementById('out').appendChild(d);
             await new Promise(r => setTimeout(r, 600));
         }
+       
         document.getElementById('terminal').classList.add('shake');
         setTimeout(() => {
             document.getElementById('terminal').classList.remove('shake');
@@ -217,37 +219,48 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     function spawnEasterEggs() {
     easterActive = true; // Активируем режим пасхалок
     playBeep(600, 0.2);
+   
     const data = [
-        { img: "images/gnom.jpg", text: "Мы, гномы, такие - 1,56" },
-        { img: "images/fox.png", text: "Нет в мире совершенства!" },
+        { img: "images/gnom.jpg", text: "Гномы такие вредные!" },
+        { img: "images/fox.png", text: "Нет в мире совершенства!.." },
         { img: "images/spider.png", text: "Паучара..." },
         { img: "images/tiger.png", text: "Я могу и зарычать..." },
         { img: "images/rabbit.png", text: "Зай, я фсё..." },
         { img: "images/button.png", text: "Нажимаааю!..." },
-        { img: "images/anchor.png", text: "Якорёчки-якоря" },
+        { img: "images/anchor.png", text: "Якорёчки-якоря..." },
         { img: "images/westham.jpg", text: "West Ham United forever" },
-        { img: "images/kuniman.png", text: "Присаживайся удобнее..." }
+        { img: "images/kuniman.jpg", text: "Kuniman: Присаживайся удобнее..." },
+        { img: "images/suchi.jpg", text: "Нехуй тут сушить вёсла!" },
     ];
 
-    data.forEach((item, index) => {
-        setTimeout(() => {
-            // ПРОВЕРКА: если мы уже вышли из окна, новые картинки не создаем
-            if (!easterActive) return; 
+// 1. Создаем массив для отслеживания таймеров (вне функции)
+const easterTimers = []; 
 
-            const el = document.createElement('div');
-            el.className = 'easter-obj';
-            el.innerHTML = `
-                <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
-                <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
-            `;
-            el.style.left = (Math.random() * 60 + 20) + "%";
-            el.style.top = (Math.random() * 60 + 20) + "%";
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 10000);
-        }, index * 1200);
-    });
+// 2. Сам исправленный блок генерации элементов
+function startEasterEgg(data) { 
+  data.forEach((item, index) => {
+    const spawnTimer = setTimeout(() => {
+      if (!easterActive) return;
+      const el = document.createElement('div');
+      el.className = 'easter-obj';  // Гарантируем позиционирование через JS
+      el.style.position = 'fixed';
+      el.style.zIndex = '9999';
+      el.style.left = `${Math.random() * 60 + 20}%`;
+      el.style.top = `${Math.random() * 60 + 20}%`;
+      el.style.transform = 'translate(-50%, -50%)';
+      el.innerHTML = `
+        <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
+        <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
+      `;
+      document.body.appendChild(el);
+      const removeTimer = setTimeout(() => el.remove(), 10000);
+      easterTimers.push(removeTimer);
+    }, index * 1200);
+
+    easterTimers.push(spawnTimer);
+  });
 }
-    function animate() {
+     function animate() {
         drawMatrix();
         if (particles.length > 0) {
             particles.forEach((p, index) => {
