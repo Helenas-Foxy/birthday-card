@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jacob 4.4 — Ultimate Edition</title>
+    <style>
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+        #terminal { width: 90%; max-width: 500px; background: rgba(10, 10, 10, 0.9); padding: 25px; border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0,255,65,0.4); position: relative; z-index: 10; transition: transform 0.1s; }
+       .tag-white { 
+       font-weight: bold; 
+       color: #fff; /* Белый цвет */
+       display: block; /* С новой строки */
+       margin-top: 15px; 
+        }
+        .shake { animation: shake 0.2s infinite; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-3px, 0px) rotate(1deg); }
+            100% { transform: translate(1px, -1px) rotate(0deg); }
+        }
+        .btn { background: #00ff41; color: #000; border: none; padding: 12px; cursor: pointer; width: 100%; margin-top: 20px; font-family: inherit; font-weight: bold; font-size: 1.1em; transition: 0.3s; box-shadow: 0 0 10px #00ff41; }
+        .btn:hover { background: #fff; box-shadow: 0 0 20px #fff; }
+        .line { margin: 8px 0; font-size: 0.9em; border-left: 2px solid #00ff41; padding-left: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        #final-msg { color: #fff; font-weight: bold; font-size: 1.3em; margin-top: 15px; display: none; text-align: center; }
+        
+        /* Стили для лога и пасхалки */
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 20px; box-sizing: border-box; overflow-y: auto; color: #00ff41; }
+        .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; }
+        
+        /* Кнопка-заяц */
+        #easter-rabbit {
+          position: relative;
+          font-size: 40px;
+          cursor: pointer;
+          display: inline-block;
+          margin-top: 30px;
+          user-select: none;
+          /* Плавный переход для базовых свойств */
+          transition: all 0.5s ease-in-out; 
+          /* Бесконечные легкие прыжки на месте (0.6 секунды на один цикл) */
+          animation: bunnyHop 0.6s infinite ease-in-out; 
+        }
+
+        /* Анимация микро-прыжков на месте */
+        @keyframes bunnyHop {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); } /* Высота прыжка */
+        }
+
+        /* Вылетающие объекты */
+    .easter-obj {
+          position: fixed;
+          z-index: 200;
+          pointer-events: none;
+          background: rgba(0,0,0,0.85);
+          border: 2px solid #00ff41;
+          padding: 12px;           /* Чуть уменьшили отступ для компактности */
+          border-radius: 12px;
+          text-align: center;
+          color: #fff;
+          box-shadow: 0 0 15px rgba(0,255,101,0.3);
+          max-width: 150px;        /* Жестко ограничиваем ширину карточки */
+          box-sizing: border-box;  /* Чтобы padding не увеличивал ширину сверх max-width */
+  
+          /* Ваша анимация */
+          animation: floatAround 10s ease-in-out forwards;
+        }
+
+        /* 📱 Специальные правила для мобильных экранов (шириной до 480px) */
+    @media (max-width: 480px) {
+      .easter-obj {
+        padding: 8px;
+        max-width: 130px; /* Делаем карточку чуть компактнее на смартфонах */
+      }
+      .easter-obj img {
+        width: 100px !important; /* Уменьшаем картинку со 120px до 100px на телефонах */
+      }
+      .easter-obj div {
+        font-size: 12px !important; /* Уменьшаем шрифт текста под картинкой */
+      }
+    }
+
+    @keyframes floatAround {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      10% { transform: scale(1) rotate(5deg); opacity: 1; }
+      50% { transform: scale(1.1) translate(20px, -30px) rotate(-5deg); }
+      90% { opacity: 1; }
+      100% { transform: scale(0.8) translate(-20px, -60px) rotate(10deg); opacity: 0; }
+    }
+    </style>
+</head>
+<body>
+
+<canvas id="mainCanvas"></canvas>
+
+<div id="terminal">
+    <div id="out">
+        <div style="color:#888; margin-bottom: 10px;">// Jacob OS [v.4.4]</div>
+        <div>> Status: Awaiting deployment...</div>
+    </div>
+    <button class="btn" id="goBtn" onclick="initSystem()">START_UPGRADE.SH</button>
+    <div id="final-msg">
+        <div style="font-size: 1.5em; margin-bottom: 10px;">🎉 DEPLOYED! 🎉</div>
+        HAPPY BIRTHDAY, JACOB!<br> Пусть жизнь компилится без багов!
+        <button class="btn" id="moreBtn" style="background:transparent; color:#00ff41; border:1px solid #00ff41;" onclick="showLog()">VIEW_CHANGELOG</button>
+    </div>
+</div>
+
+<div id="overlay">
+    <span class="close-btn" onclick="closeLog()">[ BACK_TO_CONSOLE ]</span>
+    <div id="log-content" style="max-width: 600px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #050505;">
+        <h1 style="color: #fff;">Changelog: v4.4 — Jacob</h1>
+        <p><i>Быстрее! Стабильнее! Твой Jacob в лучшей форме!</i></p>
+        <hr border="1" color="#00ff41">
+
+        <h2>🚀 Added (Новое в этой версии):</h2>
+        <span class="tag-white">Module "Unstoppable Wealth":</span>
+        <span class="desc"> 💰 Внедрен алгоритм автоматического пополнения банковского счета.</span>
+        <span class="tag-white">Feature "Ideal Body":</span>
+        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тартом с богемными сырами.</span>
+        <span class="tag-white">System "Smart Zen":</span>
+        <span class="desc"> 🧘‍♂️ Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
+        <span class="tag-white">New Location:</span>
+        <span class="desc"> 🗺️ Открыты новые направления для путешествий (доступны в режиме Real Life).</span>
+                      
+        <h2>🛠 Changed (Изменения и улучшения):</h2>
+        <span class="tag-white">Engine Update:</span>
+        <span class="desc"> 🔋 Энергия Jacob оптимизирована, время на «зарядку» сокращено.</span>
+        <span class="tag-white">Engine Update:</span>
+        <span class="desc"> ⚡ Личный КПД увеличен на 100%.</span>
+        <span class="tag-white">UI/UX:</span>
+        <span class="desc"> 😎 Скиллы «Уверенность», «Экспертность», «Позитивность» активированы по умолчанию.</span>
+        <span class="tag-white">Algorithm "Priority":</span>
+        <span class="desc"> 👌 Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
+
+        <h2>🩹 Fixed:</h2>
+        <span class="tag-white">Bug "Procrastination":</span>
+        <span class="desc"> 🤏 Фикс критической ошибки лени.</span>
+        <span class="tag-white">Issue "Stress"</span>
+        <span class="desc">:🎯 Удалена критическая уязвимость, позволявшая мелким багам портить настроение.Патч против плохого настроения.</span>
+
+        <h2>🗑 Removed:</h2>
+        <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
+        <span class="line">• Очищен кэш прошлых обид и неудачных релизов.👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌</span>
+
+        <!-- Секретный заяц -->
+        <div style="text-align: center; margin-top: 20px;">
+            <div id="easter-rabbit" onclick="spawnEasterEggs()" style="
+               display: inline-block;
+               cursor: pointer;
+               font-size: 40px;
+               user-select: none;
+               transition: left 0.3s ease, top 0.3s ease;
+               ">🐇</div>
+            </div> 
+       </div>
+</div>
+
+    <!-- Фоновая музыка второй страницы -->
+<audio id="changelogMusic" preload="auto" loop> 
+  <source src="images/it.mp3" type="audio/mpeg"> 
+</audio>
+
+<!-- 🌟 Новый аудиотрек для пасхалки (Заяц) -->
+<audio id="easterMusic" preload="auto" loop> 
+  <source src="images/easter.mp3" type="audio/mpeg"> 
+</audio>
+
+
+<script>
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let easterActive = false;
+    let matrixSymbols = [];
+    const alphabet = "01";
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resize;
+    resize();
+
+    const columns = canvas.width / 20;
+    for(let x = 0; x < columns; x++) matrixSymbols[x] = 1;
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#003300";
+        ctx.font = "16px monospace";
+        for(let i = 0; i < matrixSymbols.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * 20, matrixSymbols[i] * 20);
+            if(matrixSymbols[i] * 20 > canvas.height && Math.random() > 0.975) matrixSymbols[i] = 0;
+            matrixSymbols[i]++;
+        }
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+   
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playBeep(freq, dur) {
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.frequency.value = freq;
+  gain.gain.value = 0.05;
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + dur);
+}
+
+    async function initSystem() {
+        document.getElementById('goBtn').style.display = 'none';
+        const logs = ["> Cleaning...", "> Patching...", "> Upgrading Jacob...", "> DONE."];
+        for (let l of logs) {
+            playBeep(400, 0.05);
+            let d = document.createElement('div'); d.className = 'line'; d.textContent = l;
+            document.getElementById('out').appendChild(d);
+            await new Promise(r => setTimeout(r, 600));
+        }
+       
+        document.getElementById('terminal').classList.add('shake');
+        setTimeout(() => {
+            document.getElementById('terminal').classList.remove('shake');
+            document.getElementById('final-msg').style.display = 'block';
+            // Конфетти при успехе
+            for(let i=0; i<50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 5 + 5,
+                    color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                    vel: Math.random() * 3 + 2,
+                    rot: 0
+                });
+            }
+        }, 500);
+    }
+
+    function showLog() {
+    
+    // Запуск музыки
+    const music = document.getElementById('changelogMusic');
+    if (music) {
+        music.volume = 0.5;
+        music.play().catch(e => console.log("Ошибка звука:", e));
+    }
+    
+    document.getElementById('overlay').style.display = 'block';
+        moveRabbit();
+}
+    // Останавливаем создание новых объектов
+    function closeLog() {
+    easterActive = false; 
+    
+    const music = document.getElementById('changelogMusic');
+    if (music) {
+        music.pause();
+        music.currentTime = 0; 
+    }
+    
+    // Удаляем все, что уже успело вылететь
+    document.querySelectorAll('.easter-obj').forEach(el => el.remove());
+    document.getElementById('overlay').style.display = 'none';
+}
+    
+    // Функция, которая срабатывает при нажатии на ЗАЙЦА
+    function spawnEasterEggs() { 
+  easterActive = true; 
+  playBeep(600, 0.2);
+  
+  const bgMusic = document.getElementById('changelogMusic');
+  const easterMusic = document.getElementById('easterMusic');
+
+  // 1. Намертво останавливаем и сбрасываем предыдущий трек
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0; 
+  }
+
+  // 2. Включаем новый аудиотрек пасхалки
+  if (easterMusic) {
+    easterMusic.currentTime = 0; // Запуск с начала
+    easterMusic.play().catch(err => console.log("Браузер заблокировал автовоспроизведение звука:", err));
+  }
+  
+  // 3. Запускаем генерацию картинок
+  if (typeof easterData !== 'undefined') {
+    startEasterEgg(easterData); 
+  } else if (typeof data !== 'undefined') {
+    startEasterEgg(data);
+  }
+}
+    
+    const easterData = [
+        { img: "images/gnom.jpg", text: "Гномы такие вредные!" },
+        { img: "images/fox.png", text: "Нет в мире совершенства!.." },
+        { img: "images/spider.png", text: "Паучара..." },
+        { img: "images/tiger.png", text: "Я могу и зарычать..." },
+        { img: "images/rabbit.png", text: "Зай, я фсё..." },
+        { img: "images/button.png", text: "Нажимаааю!..." },
+        { img: "images/anchor.png", text: "Якорёчки-якоря..." },
+        { img: "images/westham.jpg", text: "West Ham United forever" },
+        { img: "images/kuniman.jpg", text: "Kuniman: Присаживайся удобнее..." },
+        { img: "images/suchi.jpg", text: "Нехуй тут вёсла сушить!" },
+    ];
+
+    // Массив для отслеживания активных таймеров (вне функции)
+   const easterTimers = [];
+  
+  // Блок генерации элементов на экране
+  function startEasterEgg(data) {
+  if (!data || !Array.isArray(data)) return;
+
+  easterActive = true;
+
+  data.forEach((item, index) => {
+    const spawnTimer = setTimeout(() => {
+      if (!easterActive) return;
+
+      const el = document.createElement('div');
+      el.className = 'easter-obj';
+
+      // 📱 Адаптивный расчет безопасной зоны появления:
+      const cardWidth = 160;  // Примерная максимальная ширина карточки с отступами
+      const cardHeight = 200; // Примерная максимальная высота карточки с текстом
+      
+      // Вычисляем доступную ширину и высоту экрана за вычетом размеров карточки
+      const maxX = window.innerWidth - cardWidth;
+      const maxY = window.innerHeight - cardHeight;
+
+      // Генерируем случайную точку, гарантированно отступая от краев экрана
+      // Минимальный отступ от левого/верхнего края — 20 пикселей
+      const randomX = Math.random() * (maxX - 20) + 20;
+      const randomY = Math.random() * (maxY - 20) + 20;
+
+      // Устанавливаем координаты в пикселях
+      el.style.left = `${randomX}px`;
+      el.style.top = `${randomY}px`;
+
+      el.innerHTML = `
+        <img src="${item.img}" style="width:120px; height:auto; display:block; margin:0 auto 10px; border-radius:8px; border:1px solid #00ff41;">
+        <div style="font-weight:bold; color:#fff; font-size:14px; text-align:center;">${item.text}</div>
+      `;
+
+      document.body.appendChild(el);
+
+      const removeTimer = setTimeout(() => el.remove(), 10000);
+      easterTimers.push(removeTimer);
+    }, index * 1200);
+
+    easterTimers.push(spawnTimer);
+  });
+}
+  
+  // Функция для закрытия (вызывать при выходе из окна)
+function stopEasterEgg() {
+  easterActive = false;
+
+  // 1. Полностью выключаем и сбрасываем ТРЕК ПАСХАЛКИ
+  const easterMusic = document.getElementById('easterMusic');
+  if (easterMusic) {
+    easterMusic.pause();
+    easterMusic.currentTime = 0;
+  }
+
+  // 2. Полностью выключаем и сбрасываем ФОНОВУЮ МУЗЫКУ
+  const bgMusic = document.getElementById('changelogMusic');
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  }
+
+  // 3. Удаляем все летающие объекты с экрана
+  if (typeof easterTimers !== 'undefined') {
+    easterTimers.forEach(timer => clearTimeout(timer));
+    easterTimers.length = 0;
+  }
+  document.querySelectorAll('.easter-obj').forEach(el => el.remove());
+}
+  
+     function animate() {
+        drawMatrix();
+        if (particles.length > 0) {
+            particles.forEach((p, index) => {
+                p.y += p.vel;
+                p.rot += 5;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+                if (p.y > canvas.height) particles.splice(index, 1);
+            });
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+   
+ // Переменную интервала обязательно объявляем снаружи функции
+let rabbitInterval = null; 
+
+function moveRabbit() {
+  const r = document.getElementById('easter-rabbit');
+  if (!r) return;
+
+  // Если таймер уже запущен, не создаем дубликат
+  if (rabbitInterval) return;
+
+  // Базовые стили для центрирования в потоке текста
+  r.style.position = 'relative';
+  r.style.display = 'inline-block';
+  r.style.transition = 'transform 0.1s ease-in-out';
+
+  rabbitInterval = setInterval(() => {
+    const overlay = document.getElementById('overlay');
+    
+    // Если окно закрыто, останавливаем интервал
+    if (overlay && overlay.style.display === 'none') {
+      clearInterval(rabbitInterval);
+      rabbitInterval = null;
+      r.style.transform = 'translate(0, 0)'; // Возвращаем в центр
+      return;
+    }
+
+    // Использование ваших переменных x и y для имитации прыжков на месте
+    const x = Math.random() * 20 - 10; // Небольшое смещение влево-вправо
+    const y = -(Math.random() * 15 + 5); // Прыжок строго вверх
+
+    r.style.transform = `translate(${x}px, ${y}px)`;
+
+    // Возвращаем зайца в исходную точку перед следующим прыжком
+    setTimeout(() => {
+      r.style.transform = 'translate(0, 0)';
+    }, 100);
+
+  }, 400); // Повторять прыжок каждые 400 миллисекунд
+}
+
+function spawnEasterEggs() { 
+  easterActive = true; 
+  if (typeof playBeep === 'function') playBeep(600, 0.2);
+  
+  // Запускаем исправленную генерацию картинок
+  startEasterEgg(easterData); 
+  
+  // Опционально: заставляем зайца прыгнуть в новое место при клике
+  moveRabbit(); 
+}
+  
+</script>
+</body>
+</html>
