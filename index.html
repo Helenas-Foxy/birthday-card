@@ -230,15 +230,15 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         { img: "images/anchor.png", text: "Якорёчки-якоря..." },
         { img: "images/westham.jpg", text: "West Ham United forever" },
         { img: "images/kuniman.jpg", text: "Kuniman: Присаживайся удобнее..." },
-        { img: "images/suchi.jpg", text: "Нехуй тут сушить вёсла!" },
+        { img: "images/suchi.jpg", text: "Нехуй тут вёсла сушить!" },
     ];
 
 // 1. Создаем массив для отслеживания таймеров (вне функции)
-const easterTimers = []; 
+   const easterTimers = []; 
 
 // 2. Сам исправленный блок генерации элементов
-function startEasterEgg(data) { 
-  data.forEach((item, index) => {
+  function startEasterEgg(data) { 
+      data.forEach((item, index) => {
     const spawnTimer = setTimeout(() => {
       if (!easterActive) return;
       const el = document.createElement('div');
@@ -295,6 +295,15 @@ function startEasterEgg(data) {
         r.style.transform = `translate(${x}px, ${y}px)`;
     }, 500);
 }
+  function stopEasterEgg() {
+  easterActive = false;
+  // Отменяем все будущие появления картинок
+  easterTimers.forEach(timer => clearTimeout(timer));
+  easterTimers.length = 0; 
+  // Удаляем те картинки, которые сейчас висят на экране
+  document.querySelectorAll('.easter-obj').forEach(el => el.remove());
+}
+
 </script>
 </body>
 </html>
