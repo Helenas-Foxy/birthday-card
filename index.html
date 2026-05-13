@@ -89,19 +89,19 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         <span class="tag-white">Module "Unstoppable Wealth":</span>
         <span class="desc"> 💰 Внедрен алгоритм автоматического пополнения банковского счета.</span>
         <span class="tag-white">Feature "Ideal Body":</span>
-        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тортиками.</span>
+        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тартом с богемными сырами.</span>
         <span class="tag-white">System "Smart Zen":</span>
         <span class="desc"> 🧘‍♂️ Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
         <span class="tag-white">New Location:</span>
-        <span class="desc"> 🗺️ Открыты новые карты для путешествий (доступны в режиме Real Life).</span>
+        <span class="desc"> 🗺️ Открыты новые направления для путешествий (доступны в режиме Real Life).</span>
                       
         <h2>🛠 Changed (Изменения и улучшения):</h2>
         <span class="tag-white">Engine Update:</span>
-        <span class="desc"> 🔋 Личная энергия оптимизирована, время на «зарядку» сокращено.</span>
+        <span class="desc"> 🔋 Энергия Jacob оптимизирована, время на «зарядку» сокращено.</span>
         <span class="tag-white">Engine Update:</span>
         <span class="desc"> ⚡ Личный КПД увеличен на 100%.</span>
         <span class="tag-white">UI/UX:</span>
-        <span class="desc"> 😎 Скин «Уверенность» активирован по умолчанию.</span>
+        <span class="desc"> 😎 Скиллы «Уверенность», «Экспертность», «Позитивность» активированы по умолчанию.</span>
         <span class="tag-white">Algorithm "Priority":</span>
         <span class="desc"> 👌 Теперь система автоматически отсеивает чужое мнение и фокусируется на личных желаниях.</span>
 
@@ -115,7 +115,6 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         <span class="line">• Удалены устаревшие зависимости: токсичные люди, пустые страхи и лишние сомнения.</span>
         <span class="line">• Очищен кэш прошлых обид и неудачных релизов.👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌</span>
 
-        
         <!-- Секретный заяц -->
         <div style="text-align: center;">
             <div id="easter-rabbit" onclick="spawnEasterEggs()">🐇</div>
@@ -238,6 +237,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
 // 2. Сам исправленный блок генерации элементов
   function startEasterEgg(data) { 
+      easterActive = true;
       data.forEach((item, index) => {
     const spawnTimer = setTimeout(() => {
       if (!easterActive) return;
@@ -259,6 +259,14 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
     easterTimers.push(spawnTimer);
   });
+}
+    function stopEasterEgg() {
+  easterActive = false;
+  // Отменяем все будущие появления картинок
+  easterTimers.forEach(timer => clearTimeout(timer));
+  easterTimers.length = 0; 
+  // Удаляем те картинки, которые сейчас висят на экране
+  document.querySelectorAll('.easter-obj').forEach(el => el.remove());
 }
      function animate() {
         drawMatrix();
@@ -289,21 +297,12 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
             clearInterval(rabbitInterval);
             return;
         }
-
-        const x = Math.random() * 40 - 20; // Прыжок по горизонтали
-        const y = Math.random() * 20 - 10; // Прыжок по вертикали
-        r.style.transform = `translate(${x}px, ${y}px)`;
+    const x = Math.random() * 40 - 20; // Прыжок по горизонтали
+    const y = Math.random() * 20 - 10; // Прыжок по вертикали
+    r.style.transform = `translate(${x}px, ${y}px)`;
     }, 500);
 }
-  function stopEasterEgg() {
-  easterActive = false;
-  // Отменяем все будущие появления картинок
-  easterTimers.forEach(timer => clearTimeout(timer));
-  easterTimers.length = 0; 
-  // Удаляем те картинки, которые сейчас висят на экране
-  document.querySelectorAll('.easter-obj').forEach(el => el.remove());
-}
-
+  
 </script>
 </body>
 </html>
