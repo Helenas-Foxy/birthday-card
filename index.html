@@ -116,12 +116,19 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         <span class="line">• Очищен кэш прошлых обид и неудачных релизов.👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌👌</span>
 
         <!-- Секретный заяц -->
-        <div style="text-align: center;">
-            <div id="easter-rabbit" onclick="spawnEasterEggs()">🐇</div>
-        </div>
-    </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <div id="easter-rabbit" onclick="spawnEasterEggs()" style="
+               display: inline-block;
+               cursor: pointer;
+               font-size: 40px;
+               user-select: none;
+               transition: left 0.3s ease, top 0.3s ease;
+               "> Harbinger of Easter 🐇</div>
+            </div> 
+       </div>
 </div>
-<audio id="changelogMusic" preload="auto" loop>
+
+    <audio id="changelogMusic" preload="auto" loop>
     <source src="images/it.mp3" type="audio/mpeg">
 </audio>
 
@@ -224,6 +231,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
     easterActive = true; // Активируем режим пасхалок
     if (typeof playBeep === 'function') playBeep(600, 0.2);
    startEasterEgg(easterData); 
+   moveRabbit();
 }
     
     const easterData = [
@@ -306,11 +314,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
   // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
   r.style.position = 'fixed';
-  r.style.cursor = 'pointer';
   r.style.zIndex = '10000';
-  r.style.fontSize = '40px'; // Увеличиваем размер эмодзи, чтобы по нему было легче попасть
-  r.style.userSelect = 'none'; // Запрещаем выделение текста при частых кликах
-  r.style.transition = 'left 0.3s ease, top 0.3s ease'; // Плавное перемещение
 
   // Вычисляем случайные координаты внутри экрана
   const randomX = Math.random() * (window.innerWidth - 60);
