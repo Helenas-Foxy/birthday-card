@@ -123,7 +123,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
                font-size: 40px;
                user-select: none;
                transition: left 0.3s ease, top 0.3s ease;
-               "> Harbinger of Easter 🐇</div>
+               ">🐇</div>
             </div> 
        </div>
 </div>
@@ -312,16 +312,24 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
   const r = document.getElementById('easter-rabbit');
   if (!r) return;
 
-  // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
-  r.style.position = 'fixed';
-  r.style.zIndex = '10000';
-
-  // Вычисляем случайные координаты внутри экрана
-  const randomX = Math.random() * (window.innerWidth - 60);
-  const randomY = Math.random() * (window.innerHeight - 60);
+       const rabbitInterval = setInterval(() => {
+           // Если окно закрыто, останавливаем интервал, чтобы не тратить ресурсы
+           if (document.getElementById('overlay').style.display === 'none') {
+               clearInterval(rabbitInterval);
+              return;
+        }
+        const x = Math.random() * 40 - 20; // Прыжок по горизонтали
+        const y = Math.random() * 20 - 10; // Прыжок по вертикали    
+        // Базовые стили для текстового эмодзи, чтобы он стал кликабельным объектом
+        r.style.position = 'fixed';
+        r.style.zIndex = '10000';
+        }
+        // Вычисляем случайные координаты внутри экрана
+        const randomX = Math.random() * (window.innerWidth - 60);
+        const randomY = Math.random() * (window.innerHeight - 60);
   
-  r.style.left = `${randomX}px`;
-  r.style.top = `${randomY}px`;
+        r.style.left = `${randomX}px`;
+        r.style.top = `${randomY}px`;
 }
 
 // Функция, вызываемая при клике из HTML (onclick="spawnEasterEggs()")
