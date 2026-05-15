@@ -29,7 +29,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         /* Стили для лога и пасхалки */
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 20px; box-sizing: border-box; overflow-y: auto; color: #00ff41; }
         .close-btn { color: #fff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: block; }
-        
+
         /* Кнопка-заяц */
         #easter-rabbit {
           position: relative;
@@ -110,10 +110,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 </div>
 
 <div id="overlay">
-    <!-- Вызываем поочередно closeLog() для закрытия окна и stopEasterEgg() для отключения музыки -->
-    <span class="close-btn" onclick="closeLog(); stopEasterEgg()">[ BACK_TO_CONSOLE ]</span>
-</div>
-
+    <span class="close-btn" onclick="closeLog()">[ BACK_TO_CONSOLE ]</span>
     <div id="log-content" style="max-width: 600px; margin: 0 auto; border: 1px solid #333; padding: 20px; background: #050505;">
         <h1 style="color: #fff;">Changelog: v4.4 — Jacob</h1>
         <p><i>Быстрее! Стабильнее! Твой Jacob в лучшей форме!</i></p>
@@ -123,7 +120,7 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
         <span class="tag-white">Module "Unstoppable Wealth":</span>
         <span class="desc"> 💰 Внедрен алгоритм автоматического пополнения банковского счета.</span>
         <span class="tag-white">Feature "Ideal Body":</span>
-        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тартом с богемными сырами.</span>
+        <span class="desc"> 🎂 Добавлена встроенная поддержка отличной формы без конфликтов с пиццей, чебуреками и тартом с "богемными сырами".</span>
         <span class="tag-white">System "Smart Zen":</span>
         <span class="desc"> 🧘‍♂️ Полная невозмутимость при любых входящих факапах и горящих дедлайнах.</span>
         <span class="tag-white">New Location:</span>
@@ -162,16 +159,9 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
        </div>
 </div>
 
-    <!-- Фоновая музыка второй страницы -->
-<audio id="changelogMusic" preload="auto" loop> 
-  <source src="images/cl.mp3" type="audio/mpeg"> 
+    <audio id="changelogMusic" preload="auto" loop>
+    <source src="images/it.mp3" type="audio/mpeg">
 </audio>
-
-<!-- 🌟 Новый аудиотрек для пасхалки (Заяц) -->
-<audio id="easterMusic" preload="auto" loop> 
-  <source src="images/it.mp3" type="audio/mpeg"> 
-</audio>
-
 
 <script>
     const canvas = document.getElementById('mainCanvas');
@@ -203,21 +193,14 @@ canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
    
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playBeep(freq, dur) {
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.frequency.value = freq;
-  gain.gain.value = 0.05;
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + dur);
-}
+    function playBeep(freq, dur) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        gain.gain.value = 0.05;
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + dur);
+    }
 
     async function initSystem() {
         document.getElementById('goBtn').style.display = 'none';
@@ -275,31 +258,11 @@ function playBeep(freq, dur) {
 }
     
     // Функция, которая срабатывает при нажатии на ЗАЙЦА
-    function spawnEasterEggs() { 
-  easterActive = true; 
-  playBeep(600, 0.2);
-  
-  const bgMusic = document.getElementById('changelogMusic');
-  const easterMusic = document.getElementById('easterMusic');
-
-  // 1. Намертво останавливаем и сбрасываем предыдущий трек
-  if (bgMusic) {
-    bgMusic.pause();
-    bgMusic.currentTime = 0; 
-  }
-
-  // 2. Включаем новый аудиотрек пасхалки
-  if (easterMusic) {
-    easterMusic.currentTime = 0; // Запуск с начала
-    easterMusic.play().catch(err => console.log("Браузер заблокировал автовоспроизведение звука:", err));
-  }
-  
-  // 3. Запускаем генерацию картинок
-  if (typeof easterData !== 'undefined') {
-    startEasterEgg(easterData); 
-  } else if (typeof data !== 'undefined') {
-    startEasterEgg(data);
-  }
+    function spawnEasterEggs() {
+    easterActive = true; // Активируем режим пасхалок
+    if (typeof playBeep === 'function') playBeep(600, 0.2);
+   startEasterEgg(easterData); 
+   moveRabbit();
 }
     
     const easterData = [
@@ -364,31 +327,12 @@ function playBeep(freq, dur) {
 }
   
   // Функция для закрытия (вызывать при выходе из окна)
-function stopEasterEgg() {
+  function stopEasterEgg() {
   easterActive = false;
-
-  // 1. Полностью выключаем и сбрасываем ТРЕК ПАСХАЛКИ
-  const easterMusic = document.getElementById('easterMusic');
-  if (easterMusic) {
-    easterMusic.pause();
-    easterMusic.currentTime = 0;
-  }
-
-  // 2. Полностью выключаем и сбрасываем ФОНОВУЮ МУЗЫКУ
-  const bgMusic = document.getElementById('changelogMusic');
-  if (bgMusic) {
-    bgMusic.pause();
-    bgMusic.currentTime = 0;
-  }
-
-  // 3. Удаляем все летающие объекты с экрана
-  if (typeof easterTimers !== 'undefined') {
-    easterTimers.forEach(timer => clearTimeout(timer));
-    easterTimers.length = 0;
-  }
+  easterTimers.forEach(timer => clearTimeout(timer));
+  easterTimers.length = 0;
   document.querySelectorAll('.easter-obj').forEach(el => el.remove());
 }
-  
      function animate() {
         drawMatrix();
         if (particles.length > 0) {
@@ -461,4 +405,4 @@ function spawnEasterEggs() {
   
 </script>
 </body>
-          </html>
+</html>
